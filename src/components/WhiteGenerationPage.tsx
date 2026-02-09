@@ -50,7 +50,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
             />
 
             {/* Header - White Channel Style */}
-            <header className="border-b border-zinc-200 py-4 px-6 flex justify-between items-center bg-white sticky top-0 z-50">
+            <header className="border-b border-zinc-200 py-3 px-4 md:py-4 md:px-6 flex justify-between items-center bg-white sticky top-0 z-50">
                 <div className="flex items-center gap-3">
                     {/* Back Button / White Dot (with border) */}
                     <button
@@ -80,16 +80,16 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                 onClearKey={handleClearKey}
             />
 
-            <main className="max-w-[1600px] mx-auto px-6 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <main className="max-w-[1600px] mx-auto px-4 md:px-6 mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
                 {/* Left Column: Inputs */}
-                <div className="lg:col-span-4 space-y-8">
+                <div className="lg:col-span-4 space-y-6 md:space-y-8">
                     {/* Prompt Section */}
                     <section className="space-y-3">
                         <textarea
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             placeholder="Describe the space, materials, and atmosphere..."
-                            className="w-full h-40 bg-white border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-zinc-600"
+                            className="w-full h-32 md:h-40 bg-white border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-zinc-600"
                         />
                         {/* Consistency Toggle */}
                         <button
@@ -138,7 +138,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             </div>
                         </div>
                         <p className="text-[10px] text-zinc-400">
-                            Drag and drop images to guide the generation structure.
+                            Tap or drag images to guide the generation structure.
                         </p>
                     </section>
 
@@ -147,7 +147,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         onClick={handleGenerate}
                         disabled={isGenerating}
                         className={`w-full py-4 flex items-center justify-center transition-all rounded-none border border-zinc-500
-              ${isGenerating ? 'bg-zinc-50 border-zinc-200 cursor-not-allowed' : 'bg-white hover:bg-zinc-50 hover:border-zinc-400'}`}
+              ${isGenerating ? 'bg-zinc-50 border-zinc-200 cursor-not-allowed' : 'bg-white hover:bg-zinc-50 hover:border-zinc-400 active:bg-zinc-100'}`}
                     >
                         {/* Using a generic loading/active indicator for White channel, or just the red dot as a brand signature if kept, but user asked for white button */}
                         <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-white border border-zinc-400'}`}></div>
@@ -168,8 +168,8 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                 </div>
 
                 {/* Right Column: Results */}
-                <div className="lg:col-span-8 flex flex-col h-full">
-                    <div className="flex-1 min-h-[600px] border border-zinc-200 bg-zinc-50 flex flex-col relative group">
+                <div className="lg:col-span-8 flex flex-col h-full min-h-[50vh]">
+                    <div className="flex-1 min-h-[400px] md:min-h-[600px] border border-zinc-200 bg-zinc-50 flex flex-col relative group">
                         <div className="absolute top-4 left-4 z-10 flex gap-2">
                             <button
                                 onClick={() => setPreviewMode('fill')}
@@ -186,7 +186,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         </div>
 
                         {result && !isGenerating ? (
-                            <div className="flex-1 flex items-center justify-center p-8 bg-white">
+                            <div className="flex-1 flex items-center justify-center p-4 md:p-8 bg-white">
                                 <div className={`relative transition-all duration-300 bg-zinc-100 ${previewMode === 'fill' ? 'w-full aspect-video' : 'h-full aspect-square'}`}>
                                     <img
                                         id="generated-image"
@@ -194,10 +194,10 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                         alt="Generated output"
                                         className={`w-full h-full object-contain max-h-[70vh] ${previewMode === 'fill' ? 'object-cover' : 'object-contain'}`}
                                     />
-                                    <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute bottom-4 right-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={handleDownload}
-                                            className="px-4 py-2 bg-white text-zinc-900 text-xs font-medium border border-zinc-200 hover:border-zinc-400 transition-colors"
+                                            className="px-4 py-2 bg-white text-zinc-900 text-xs font-medium border border-zinc-200 hover:border-zinc-400 transition-colors shadow-sm"
                                         >
                                             Download
                                         </button>
@@ -212,22 +212,24 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         {result && !isGenerating && (
                             <div className="p-4 border-t border-zinc-200 bg-white flex justify-between items-center">
                                 <div className="flex items-center gap-2">
-                                    <h4 className="text-xs font-medium text-zinc-900">Output Generated</h4>
+                                    <h4 className="text-xs font-medium text-zinc-900">Output</h4>
                                     <span className="text-[10px] text-zinc-300">·</span>
-                                    <p className="text-[10px] text-zinc-400">{imageSize} · {new Date().toLocaleTimeString()}</p>
+                                    <p className="text-[10px] text-zinc-400">{imageSize}</p>
                                 </div>
-                                <button
-                                    onClick={() => setResult(null)}
-                                    className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
-                                >
-                                    Reset View
-                                </button>
-                                <button
-                                    onClick={() => reusePrompt(result.prompt)}
-                                    className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
-                                >
-                                    Reuse Prompt
-                                </button>
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => setResult(null)}
+                                        className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
+                                    >
+                                        Reset
+                                    </button>
+                                    <button
+                                        onClick={() => reusePrompt(result.prompt)}
+                                        className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
+                                    >
+                                        Reuse
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -235,27 +237,13 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
             </main>
 
             {/* History Section */}
-            <section className="max-w-[1600px] mx-auto px-6 mt-16 pb-20 border-t border-zinc-100 pt-8">
-                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
+            <section className="max-w-[1600px] mx-auto px-4 md:px-6 mt-12 md:mt-16 pb-20 border-t border-zinc-100 pt-8">
+                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 md:gap-4">
                     {history.map((item) => (
                         <div key={item.timestamp} className="group relative aspect-square bg-zinc-50 border border-zinc-100 overflow-hidden cursor-pointer hover:border-zinc-300 transition-colors"
                             onClick={() => restoreHistoryItem(item)}
                         >
                             <img src={item.imageUrl.startsWith('data:') ? item.imageUrl : `data:image/jpeg;base64,${item.imageUrl}`} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); restoreHistoryItem(item); }}
-                                    className="bg-white/90 hover:bg-white text-zinc-900 text-[10px] px-2 py-1 rounded-sm w-full font-medium"
-                                >
-                                    View
-                                </button>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); reusePrompt(item.prompt); }}
-                                    className="bg-zinc-900/90 hover:bg-zinc-800 text-white text-[10px] px-2 py-1 rounded-sm w-full font-medium"
-                                >
-                                    Use Prompt
-                                </button>
-                            </div>
                         </div>
                     ))}
                 </div>
