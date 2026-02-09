@@ -54,13 +54,14 @@ export const generateImage = async (
   // Combine prompt logic
   let fullPrompt = "";
   if (config.consistencyFixed) {
-    fullPrompt = `CONSISTENCY INSTRUCTION: You are in 'Strict Preservation' mode.
+    fullPrompt = `CONSISTENCY INSTRUCTION: You are in 'Strict Editing' mode.
     1. The FIRST image provided is the MASTER REFERENCE.
-    2. You MUST PRESERVE the content of the reference image EXACTLY, including the background, spatial layout, lighting, camera angle, and composition.
+    2. You MUST PRESERVE the content of the reference image EXACTLY, pixel-for-pixel where possible, including the background, spatial layout, lighting, camera angle, and composition.
     3. DO NOT generate a new perspective. DO NOT change the room structure, walls, floor, or windows.
     4. ONLY modify the specific objects or elements mentioned in the user's prompt: "${userPrompt}".
-    5. If the user asks to replace an object, keep everything else in the scene 100% identical to the reference.
-    6. Output must overlap perfectly with the reference image except for the requested changes.`;
+    5. If the user asks to replace an object, everything else in the scene MUST remain identical.
+    6. Output must overlap perfectly with the reference image except for the requested changes.
+    7. This is an IMAGE EDITING task, not a generation task.`;
   } else {
     fullPrompt = `Generate a high-quality architectural image based on this description: "${userPrompt}".
     Apply a minimalist, high-end, photorealistic aesthetic. Style Guide: ${DEFAULT_POSITIVE_PROMPT}. Avoid: ${DEFAULT_NEGATIVE_PROMPT}`;
@@ -79,15 +80,23 @@ export const generateImage = async (
   ];
 
   try {
+    const generationConfig: any = {
+      imageConfig: {
+        aspectRatio: config.aspectRatio,
+        imageSize: config.size,
+      },
+    };
+
+    // Add low temperature for strict consistency
+    if (config.consistencyFixed) {
+      generationConfig.temperature = 0.0;
+      generationConfig.topP = 0.1;
+    }
+
     const response = await ai.models.generateContent({
       model: APP_MODEL,
       contents: { parts },
-      config: {
-        imageConfig: {
-          aspectRatio: config.aspectRatio,
-          imageSize: config.size,
-        },
-      },
+      config: generationConfig,
     });
 
     if (!response.candidates?.[0]?.content?.parts) {
