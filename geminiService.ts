@@ -54,12 +54,13 @@ export const generateImage = async (
   // Combine prompt logic
   let fullPrompt = "";
   if (config.consistencyFixed) {
-    fullPrompt = `CONSISTENCY INSTRUCTION: You are in 'Architecture Consistency' mode.
-    1. The FIRST image provided is the REFERENCE image.
-    2. You MUST strictly maintain the architectural style, material palette, lighting, and composition of the REFERENCE image.
-    3. Generate a NEW perspective or variation of the REFERENCE scene based on the user's prompt: "${userPrompt}".
-    4. Do not deviate from the established visual language of the reference.
-    5. If no specific change is requested, simply refine the reference image while keeping it visually identical.`;
+    fullPrompt = `CONSISTENCY INSTRUCTION: You are in 'Strict Preservation' mode.
+    1. The FIRST image provided is the MASTER REFERENCE.
+    2. You MUST PRESERVE the content of the reference image EXACTLY, including the background, spatial layout, lighting, camera angle, and composition.
+    3. DO NOT generate a new perspective. DO NOT change the room structure, walls, floor, or windows.
+    4. ONLY modify the specific objects or elements mentioned in the user's prompt: "${userPrompt}".
+    5. If the user asks to replace an object, keep everything else in the scene 100% identical to the reference.
+    6. Output must overlap perfectly with the reference image except for the requested changes.`;
   } else {
     fullPrompt = `Generate a high-quality architectural image based on this description: "${userPrompt}".
     Apply a minimalist, high-end, photorealistic aesthetic. Style Guide: ${DEFAULT_POSITIVE_PROMPT}. Avoid: ${DEFAULT_NEGATIVE_PROMPT}`;
