@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { generateImage } from '../../geminiService';
-import { ReferenceImage, GenerationResult, ImageSize, AspectRatio } from '../../types';
+import { ReferenceImage, GenerationResult, ImageSize, AspectRatio, EngineType } from '../../types';
 
 interface UseGenerationLogicProps {
     apiKey: string | null;
@@ -12,6 +12,7 @@ export const useGenerationLogic = ({ apiKey, setShowKeyModal }: UseGenerationLog
     const [references, setReferences] = useState<ReferenceImage[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isConsistencyFixed, setIsConsistencyFixed] = useState(false);
+    const [engineType, setEngineType] = useState<EngineType>('4K');
     const [result, setResult] = useState<GenerationResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [previewMode, setPreviewMode] = useState<'fit' | 'fill'>('fill');
@@ -127,7 +128,8 @@ export const useGenerationLogic = ({ apiKey, setShowKeyModal }: UseGenerationLog
             const imageUrl = await generateImage(apiKey, prompt, imagesToPass, {
                 size: imageSize,
                 aspectRatio: aspectRatio,
-                consistencyFixed: isConsistencyFixed
+                consistencyFixed: isConsistencyFixed,
+                engineType: engineType
             });
 
             const newResult = {
@@ -179,6 +181,7 @@ export const useGenerationLogic = ({ apiKey, setShowKeyModal }: UseGenerationLog
         references, setReferences,
         isGenerating,
         isConsistencyFixed, setIsConsistencyFixed,
+        engineType, setEngineType,
         result, setResult,
         error,
         previewMode, setPreviewMode,

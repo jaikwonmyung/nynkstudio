@@ -1,7 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { ImageSize, AspectRatio } from "./types";
-import { DEFAULT_POSITIVE_PROMPT, DEFAULT_NEGATIVE_PROMPT, APP_MODEL } from "./constants";
+import { ImageSize, AspectRatio, EngineType } from "./types";
+import { DEFAULT_POSITIVE_PROMPT, DEFAULT_NEGATIVE_PROMPT, APP_MODEL, TURBO_MODEL } from "./constants";
 
 const resizeImage = (base64Str: string): Promise<string> => {
   return new Promise((resolve) => {
@@ -47,9 +47,10 @@ export const generateImage = async (
   apiKey: string,
   userPrompt: string,
   images: { data: string; mimeType: string }[],
-  config: { size: ImageSize; aspectRatio: AspectRatio; consistencyFixed: boolean }
+  config: { size: ImageSize; aspectRatio: AspectRatio; consistencyFixed: boolean; engineType: EngineType }
 ) => {
   const ai = new GoogleGenAI({ apiKey });
+  const selectedModel = config.engineType === "NANOBANANA2" ? TURBO_MODEL : APP_MODEL;
 
   // Combine prompt logic
   let fullPrompt = "";
@@ -96,7 +97,7 @@ export const generateImage = async (
     }
 
     const response = await ai.models.generateContent({
-      model: APP_MODEL,
+      model: selectedModel,
       contents: { parts },
       config: generationConfig,
     });

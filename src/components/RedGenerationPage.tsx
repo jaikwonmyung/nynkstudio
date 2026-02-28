@@ -19,6 +19,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
         references,
         isGenerating,
         isConsistencyFixed, setIsConsistencyFixed,
+        engineType, setEngineType,
         result, setResult,
         error,
         previewMode, setPreviewMode,
@@ -90,14 +91,25 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                             placeholder="Describe the space, materials, and atmosphere..."
                             className="w-full h-32 md:h-40 bg-white border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-[#ff0000]"
                         />
-                        {/* Consistency Toggle */}
-                        <button
-                            onClick={() => setIsConsistencyFixed(!isConsistencyFixed)}
-                            className={`w-auto inline-flex items-center gap-3 py-2 px-3 border text-xs transition-all ${isConsistencyFixed ? 'bg-zinc-50 border-zinc-600 text-zinc-900' : 'bg-white border-zinc-200 text-zinc-400 hover:border-zinc-300'}`}
-                        >
-                            <i className={`fa-solid ${isConsistencyFixed ? 'fa-lock' : 'fa-lock-open'} text-[10px]`}></i>
-                            <div className={`w-1.5 h-1.5 rounded-full ${isConsistencyFixed ? 'bg-red-500' : 'bg-zinc-200'}`}></div>
-                        </button>
+                        <div className="flex items-center gap-2">
+                            {/* Consistency Toggle */}
+                            <button
+                                onClick={() => setIsConsistencyFixed(!isConsistencyFixed)}
+                                className={`w-auto inline-flex items-center gap-3 py-2 px-3 border text-xs transition-all ${isConsistencyFixed ? 'bg-zinc-50 border-zinc-600 text-zinc-900' : 'bg-white border-zinc-200 text-zinc-400 hover:border-zinc-300'}`}
+                            >
+                                <i className={`fa-solid ${isConsistencyFixed ? 'fa-lock' : 'fa-lock-open'} text-[10px]`}></i>
+                                <div className={`w-1.5 h-1.5 rounded-full ${isConsistencyFixed ? 'bg-red-500' : 'bg-zinc-200'}`}></div>
+                            </button>
+
+                            {/* Engine Selection Toggle */}
+                            <button
+                                onClick={() => setEngineType(engineType === '4K' ? 'NANOBANANA2' : '4K')}
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-400 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
+                            >
+                                <span>{engineType === '4K' ? '4K ULTRA' : 'NANOBANANA 2'}</span>
+                                <div className={`w-1 h-1 rounded-full ${engineType === 'NANOBANANA2' ? 'bg-red-500' : 'bg-zinc-200'}`}></div>
+                            </button>
+                        </div>
                     </section>
 
                     {/* Reference Images Section */}
