@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import LoginPage from './src/components/LoginPage';
 import SplitLandingPage from './src/components/SplitLandingPage';
 import RedGenerationPage from './src/components/RedGenerationPage';
@@ -12,30 +12,16 @@ const App: React.FC = () => {
   const [selectedChannel, setSelectedChannel] = useState<'red' | 'white' | null>(null);
   const [showSettings, setShowSettings] = useState(false);
 
-  useEffect(() => {
-    const storedKey = localStorage.getItem('gemini_api_key');
-    // Fallback to a build-time key (set via Vercel env GEMINI_API_KEY) so the
-    // studio works without asking the user to paste a key. The key is NOT
-    // committed to the repo.
-    const envKey = (process.env.GEMINI_API_KEY || '').trim();
-    if (storedKey) {
-      setApiKey(storedKey);
-    } else if (envKey) {
-      setApiKey(envKey);
-    } else {
-      setShowKeyModal(true);
-    }
-  }, []);
-
+  // SECURITY: the API key is NEVER persisted (no localStorage, no baked-in env
+  // key). It lives only in memory for the current session, so every time the
+  // site is opened/reloaded the user must paste their own key again.
   const handleSaveKey = () => {
     if (!tempKey.trim()) return;
-    localStorage.setItem('gemini_api_key', tempKey);
-    setApiKey(tempKey);
+    setApiKey(tempKey.trim());
     setShowKeyModal(false);
   };
 
   const handleClearKey = () => {
-    localStorage.removeItem('gemini_api_key');
     setApiKey(null);
     setTempKey('');
     setShowKeyModal(true);
@@ -45,8 +31,8 @@ const App: React.FC = () => {
     return <LoginPage onLogin={() => setIsAuthenticated(true)} />;
   }
 
-  // Ask for the API key right after login (before channel selection) so the
-  // studio is ready to generate. The key persists in localStorage.
+  // Ask for the API key right after login (before channel selection). The key
+  // is kept in memory only and is required again on every visit/reload.
   if (!apiKey || showKeyModal) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white p-6">
@@ -59,7 +45,9 @@ const App: React.FC = () => {
             type="password"
             value={tempKey}
             onChange={(e) => setTempKey(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleSaveKey(); }}
             placeholder="Paste API Key here..."
+            autoFocus
             className="w-full bg-white border border-zinc-200 p-3 text-zinc-900 text-xs outline-none focus:border-zinc-600 transition-colors rounded-none placeholder:text-zinc-300"
           />
           <button
@@ -76,6 +64,9 @@ const App: React.FC = () => {
           >
             Get API Key
           </a>
+          <p className="text-[10px] text-zinc-300 pt-2">
+            For your security, the key is not saved — enter it each visit.
+          </p>
         </div>
       </div>
     );
