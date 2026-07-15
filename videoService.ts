@@ -6,7 +6,6 @@ export interface VideoGenConfig {
   model: string;
   aspectRatio: VideoAspectRatio;
   resolution: VideoResolution;
-  durationSeconds: number;
   negativePrompt?: string;
   startImage?: { data: string; mimeType: string } | null;
 }
@@ -26,25 +25,17 @@ export const generateVideo = async (
 ): Promise<string> => {
   const ai = new GoogleGenAI({ apiKey });
 
-  const isVeo2 = config.model.startsWith("veo-2");
-
   const genConfig: any = {
     numberOfVideos: 1,
     aspectRatio: config.aspectRatio,
+    // Allow people so ordinary prompts aren't blocked by the person filter.
+    personGeneration: "allow_all",
     negativePrompt: config.negativePrompt?.trim()
       ? config.negativePrompt
       : DEFAULT_NEGATIVE_PROMPT,
+    // 1080p is only valid for 16:9; everything else falls back to 720p.
+    resolution: config.aspectRatio === "16:9" ? config.resolution : "720p",
   };
-
-  // Resolution is supported on Veo 3 (1080p only for 16:9).
-  if (!isVeo2) {
-    genConfig.resolution =
-      config.aspectRatio === "16:9" ? config.resolution : "720p";
-  }
-  // Duration control is reliable on Veo 2; Veo 3 is fixed at 8s.
-  if (isVeo2) {
-    genConfig.durationSeconds = config.durationSeconds;
-  }
 
   const request: any = {
     model: config.model,

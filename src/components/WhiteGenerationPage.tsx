@@ -12,9 +12,9 @@ interface WhiteGenerationPageProps {
 }
 
 const MODEL_LABELS: Record<VeoModelKey, string> = {
-    VEO3: 'VEO 3',
-    VEO3_FAST: 'VEO 3 FAST',
-    VEO2: 'VEO 2',
+    VEO3: 'VEO 3.1',
+    VEO3_FAST: 'VEO 3.1 FAST',
+    VEO3_LITE: 'VEO 3.1 LITE',
 };
 
 const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
@@ -30,7 +30,6 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
         modelKey, setModelKey,
         aspectRatio, setAspectRatio,
         resolution, setResolution,
-        duration, setDuration,
         history,
         draggingSlot,
         fileInputRef,
@@ -45,11 +44,10 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
     } = useVideoGenerationLogic({ apiKey, setShowKeyModal });
 
     const [showAdvanced, setShowAdvanced] = useState(false);
-    const isVeo2 = modelKey === 'VEO2';
-    const canDoHD = aspectRatio === '16:9' && !isVeo2;
+    const canDoHD = aspectRatio === '16:9';
 
     const cycleModel = () => {
-        const order: VeoModelKey[] = ['VEO3', 'VEO3_FAST', 'VEO2'];
+        const order: VeoModelKey[] = ['VEO3', 'VEO3_FAST', 'VEO3_LITE'];
         setModelKey(order[(order.indexOf(modelKey) + 1) % order.length]);
     };
 
@@ -142,20 +140,6 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 </button>
                             )}
                         </div>
-
-                        {/* Veo 2 duration slider */}
-                        {isVeo2 && (
-                            <div className="flex items-center gap-3 pt-1">
-                                <span className="text-[10px] text-zinc-400 uppercase tracking-widest">Length</span>
-                                <input
-                                    type="range" min={5} max={8} step={1}
-                                    value={duration}
-                                    onChange={(e) => setDuration(parseInt(e.target.value, 10))}
-                                    className="flex-1 accent-zinc-900"
-                                />
-                                <span className="text-[10px] text-zinc-600 w-6">{duration}s</span>
-                            </div>
-                        )}
                     </section>
 
                     {/* Start image (image-to-video) */}

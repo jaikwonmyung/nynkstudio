@@ -45,10 +45,8 @@ const App: React.FC = () => {
     return <LoginPage onLogin={() => setIsAuthenticated(true)} />;
   }
 
-  if (!selectedChannel) {
-    return <SplitLandingPage onSelect={(channel) => setSelectedChannel(channel)} />;
-  }
-
+  // Ask for the API key right after login (before channel selection) so the
+  // studio is ready to generate. The key persists in localStorage.
   if (!apiKey || showKeyModal) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white p-6">
@@ -81,6 +79,10 @@ const App: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (!selectedChannel) {
+    return <SplitLandingPage onSelect={(channel) => setSelectedChannel(channel)} />;
   }
 
   // Routing

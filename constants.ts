@@ -12,11 +12,12 @@ export const DEFAULT_NEGATIVE_PROMPT =
 export const APP_MODEL = "gemini-3-pro-image-preview";
 export const TURBO_MODEL = "gemini-3-flash-preview";
 
-// Video engines (Google Veo)
+// Video engines (Google Veo). These are the models actually available to the
+// project key (verified via ListModels). Veo 3.1 fixed 8s clips.
 export const VEO_MODELS = {
-  VEO3: "veo-3.0-generate-preview",
-  VEO3_FAST: "veo-3.0-fast-generate-preview",
-  VEO2: "veo-2.0-generate-001",
+  VEO3: "veo-3.1-generate-preview",
+  VEO3_FAST: "veo-3.1-fast-generate-preview",
+  VEO3_LITE: "veo-3.1-lite-generate-preview",
 } as const;
 
 export const DEFAULT_VEO_MODEL = VEO_MODELS.VEO3;

@@ -26,7 +26,6 @@ export const useVideoGenerationLogic = ({ apiKey, setShowKeyModal }: UseVideoLog
     const [modelKey, setModelKey] = useState<VeoModelKey>('VEO3');
     const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('16:9');
     const [resolution, setResolution] = useState<VideoResolution>('720p');
-    const [duration, setDuration] = useState<number>(8);
 
     const [history, setHistory] = useState<VideoResult[]>([]);
     const [draggingSlot, setDraggingSlot] = useState<boolean>(false);
@@ -102,7 +101,6 @@ export const useVideoGenerationLogic = ({ apiKey, setShowKeyModal }: UseVideoLog
                     model,
                     aspectRatio,
                     resolution,
-                    durationSeconds: duration,
                     negativePrompt,
                     startImage: startImage
                         ? { data: startImage.base64Data, mimeType: startImage.mimeType }
@@ -124,7 +122,11 @@ export const useVideoGenerationLogic = ({ apiKey, setShowKeyModal }: UseVideoLog
             console.error(err);
             const msg = err?.message || 'Video generation failed. Please try again.';
             setError(msg);
-            if (msg.includes('API key') || msg.includes('not found') || msg.includes('401') || msg.includes('403')) {
+            // Only re-prompt for the key on genuine auth failures — NOT on
+            // model-not-found or content errors (which used to bounce the user
+            // back to the key screen for no reason).
+            const authFail = /API key|invalid|unauthenticated|permission|401|403/i.test(msg);
+            if (authFail) {
                 setShowKeyModal(true);
             }
         } finally {
@@ -158,7 +160,6 @@ export const useVideoGenerationLogic = ({ apiKey, setShowKeyModal }: UseVideoLog
         modelKey, setModelKey,
         aspectRatio, setAspectRatio,
         resolution, setResolution,
-        duration, setDuration,
         history,
         draggingSlot,
         fileInputRef,
