@@ -66,8 +66,15 @@ export const generateImage = async (
     4. PRESERVATION PRIORITY: It is better to have a slightly imperfect edit than to change the background.
     5. NON-DESTRUCTIVE: Treat this as a Photoshop layer edit. Do not re-render the underlying room.`;
   } else {
-    fullPrompt = `Generate a high-quality architectural image based on this description: "${userPrompt}".
-    Apply a minimalist, high-end, photorealistic aesthetic. Style Guide: ${DEFAULT_POSITIVE_PROMPT}. Avoid: ${DEFAULT_NEGATIVE_PROMPT}`;
+    // Neutral generation: follow the user's description literally. Do NOT force
+    // any architecture / building / brutalist theme — that was the cause of
+    // buildings appearing in every output.
+    const cleanPrompt = (userPrompt || "").trim();
+    fullPrompt = `${cleanPrompt}
+
+Rendering guidance: ${DEFAULT_POSITIVE_PROMPT}.
+Follow the description above literally. Do not introduce any unrequested subjects, scenery, or architecture (no buildings, concrete, or brutalist structures unless the description explicitly asks for them).
+Avoid: ${DEFAULT_NEGATIVE_PROMPT}.`;
   }
 
   // Prompt construction is handled above. Sending request...

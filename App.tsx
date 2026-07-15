@@ -14,8 +14,14 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const storedKey = localStorage.getItem('gemini_api_key');
+    // Fallback to a build-time key (set via Vercel env GEMINI_API_KEY) so the
+    // studio works without asking the user to paste a key. The key is NOT
+    // committed to the repo.
+    const envKey = (process.env.GEMINI_API_KEY || '').trim();
     if (storedKey) {
       setApiKey(storedKey);
+    } else if (envKey) {
+      setApiKey(envKey);
     } else {
       setShowKeyModal(true);
     }

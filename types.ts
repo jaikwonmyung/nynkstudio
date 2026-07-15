@@ -16,3 +16,16 @@ export interface GenerationResult {
   prompt: string;
   timestamp: number;
 }
+
+// ---- Video (Veo) ----
+export type VideoAspectRatio = "16:9" | "9:16";
+export type VideoResolution = "720p" | "1080p";
+export type VeoModelKey = "VEO3" | "VEO3_FAST" | "VEO2";
+
+export interface VideoResult {
+  videoUrl: string; // object URL or data URL
+  prompt: string;
+  timestamp: number;
+  aspectRatio: VideoAspectRatio;
+  model: string;
+}

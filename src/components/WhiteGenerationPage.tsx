@@ -1,6 +1,6 @@
-import React from 'react';
-import { useGenerationLogic } from '../hooks/useGenerationLogic';
-import SettingsModal from './SettingsModal';
+import React, { useState } from 'react';
+import { useVideoGenerationLogic } from '../hooks/useVideoGenerationLogic';
+import { VeoModelKey } from '../../types';
 
 interface WhiteGenerationPageProps {
     apiKey: string | null;
@@ -11,34 +11,47 @@ interface WhiteGenerationPageProps {
     handleClearKey: () => void;
 }
 
+const MODEL_LABELS: Record<VeoModelKey, string> = {
+    VEO3: 'VEO 3',
+    VEO3_FAST: 'VEO 3 FAST',
+    VEO2: 'VEO 2',
+};
+
 const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
     apiKey, setShowKeyModal, onBack, showSettings, setShowSettings, handleClearKey
 }) => {
     const {
         prompt, setPrompt,
-        references,
-        isGenerating,
-        isConsistencyFixed, setIsConsistencyFixed,
-        engineType, setEngineType,
+        negativePrompt, setNegativePrompt,
+        startImage,
+        isGenerating, progress,
         result, setResult,
         error,
-        previewMode, setPreviewMode,
-        imageSize, setImageSize,
+        modelKey, setModelKey,
         aspectRatio, setAspectRatio,
-        draggingSlot,
+        resolution, setResolution,
+        duration, setDuration,
         history,
+        draggingSlot,
         fileInputRef,
         handleFileChange,
         handleTriggerFile,
-        removeReference,
-        onDragOver,
-        onDragLeave,
-        onDrop,
+        removeStartImage,
+        onDragOver, onDragLeave, onDrop,
         handleGenerate,
         restoreHistoryItem,
         reusePrompt,
-        handleDownload
-    } = useGenerationLogic({ apiKey, setShowKeyModal });
+        handleDownload,
+    } = useVideoGenerationLogic({ apiKey, setShowKeyModal });
+
+    const [showAdvanced, setShowAdvanced] = useState(false);
+    const isVeo2 = modelKey === 'VEO2';
+    const canDoHD = aspectRatio === '16:9' && !isVeo2;
+
+    const cycleModel = () => {
+        const order: VeoModelKey[] = ['VEO3', 'VEO3_FAST', 'VEO2'];
+        setModelKey(order[(order.indexOf(modelKey) + 1) % order.length]);
+    };
 
     return (
         <div className="min-h-screen bg-white text-zinc-900 pb-20">
@@ -50,16 +63,15 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                 onChange={handleFileChange}
             />
 
-            {/* Header - White Channel Style */}
+            {/* Header - White / Video Channel */}
             <header className="border-b border-zinc-200 py-3 px-4 md:py-4 md:px-6 flex justify-between items-center bg-white sticky top-0 z-50">
                 <div className="flex items-center gap-3">
-                    {/* Back Button / White Dot (with border) */}
                     <button
                         onClick={onBack}
                         className="w-3 h-3 rounded-full border transition-colors bg-white border-zinc-200 hover:border-zinc-400"
                         title="Back to Selection"
                     ></button>
-                    {/* White Logo Text (Optional, keeping removed per minimalist request but logic is independent now) */}
+                    <span className="text-[10px] tracking-[0.3em] text-zinc-400 uppercase">Video</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <button
@@ -71,104 +83,147 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                 </div>
             </header>
 
-            <SettingsModal
-                isOpen={showSettings}
-                onClose={() => setShowSettings(false)}
-                imageSize={imageSize}
-                setImageSize={setImageSize}
-                aspectRatio={aspectRatio}
-                setAspectRatio={setAspectRatio}
-                onClearKey={handleClearKey}
-            />
+            {/* Minimal settings popover (reset key) */}
+            {showSettings && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/5" onClick={() => setShowSettings(false)}>
+                    <div className="bg-white border border-zinc-200 shadow-xl w-full max-w-xs p-6" onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-sm font-bold tracking-tight text-zinc-900">Settings</h2>
+                            <button onClick={() => setShowSettings(false)} className="text-zinc-400 hover:text-zinc-900 transition-colors">
+                                <i className="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => { handleClearKey(); setShowSettings(false); }}
+                            className="w-full py-3 border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 text-xs font-medium transition-colors"
+                        >
+                            Reset API Key
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <main className="max-w-[1600px] mx-auto px-4 md:px-6 mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
                 {/* Left Column: Inputs */}
                 <div className="lg:col-span-4 space-y-6 md:space-y-8">
-                    {/* Prompt Section */}
+                    {/* Prompt */}
                     <section className="space-y-3">
                         <textarea
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="Describe the space, materials, and atmosphere..."
+                            placeholder="Describe the shot: subject, motion, camera movement, lighting, mood..."
                             className="w-full h-32 md:h-40 bg-white border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-zinc-600"
                         />
-                        <div className="flex items-center gap-2">
-                            {/* Consistency Toggle */}
+
+                        {/* Model + Aspect toggles */}
+                        <div className="flex flex-wrap items-center gap-2">
                             <button
-                                onClick={() => setIsConsistencyFixed(!isConsistencyFixed)}
-                                className={`w-auto inline-flex items-center gap-3 py-2 px-3 border text-xs transition-all ${isConsistencyFixed ? 'bg-zinc-50 border-zinc-600 text-zinc-900' : 'bg-white border-zinc-200 text-zinc-400 hover:border-zinc-300'}`}
+                                onClick={cycleModel}
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
                             >
-                                <i className={`fa-solid ${isConsistencyFixed ? 'fa-lock' : 'fa-lock-open'} text-[10px]`}></i>
-                                <div className={`w-1.5 h-1.5 rounded-full ${isConsistencyFixed ? 'bg-zinc-900' : 'bg-zinc-200'}`}></div>
+                                <span>{MODEL_LABELS[modelKey]}</span>
+                                <div className="w-1 h-1 rounded-full bg-zinc-900"></div>
                             </button>
 
-                            {/* Engine Selection Toggle */}
                             <button
-                                onClick={() => setEngineType(engineType === '4K' ? 'NANOBANANA2' : '4K')}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-400 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
+                                onClick={() => setAspectRatio(aspectRatio === '16:9' ? '9:16' : '16:9')}
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
                             >
-                                <span>{engineType === '4K' ? '4K ULTRA' : 'NANOBANANA 2'}</span>
-                                <div className={`w-1 h-1 rounded-full ${engineType === 'NANOBANANA2' ? 'bg-blue-500' : 'bg-zinc-300'}`}></div>
+                                <div className={`border border-current ${aspectRatio === '16:9' ? 'w-4 h-2.5' : 'w-2.5 h-4'}`}></div>
+                                <span>{aspectRatio}</span>
                             </button>
-                        </div>
-                    </section>
 
-                    {/* Reference Images Section */}
-                    <section className="space-y-3">
-                        <div className="grid grid-cols-2 gap-3">
-                            {references.map((ref, index) => (
-                                <div
-                                    key={ref.id}
-                                    onClick={() => handleTriggerFile(index)}
-                                    onDragOver={(e) => onDragOver(e, index)}
-                                    onDragLeave={onDragLeave}
-                                    onDrop={(e) => onDrop(e, index)}
-                                    className={`group relative aspect-square border transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center border-zinc-200 bg-white
-                        ${draggingSlot === index ? 'bg-zinc-50' : ''}`}
+                            {canDoHD && (
+                                <button
+                                    onClick={() => setResolution(resolution === '720p' ? '1080p' : '720p')}
+                                    className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
                                 >
-                                    <img src={ref.previewUrl} className="w-full h-full object-cover grayscale opacity-90 group-hover:opacity-100 transition-opacity" alt={`Ref ${index + 1}`} />
-                                    <div className="absolute inset-0 bg-white/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                        <span className="text-[10px] font-medium text-zinc-800">Replace</span>
-                                    </div>
-                                    <button
-                                        onClick={(e) => removeReference(index, e)}
-                                        className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-white border border-zinc-200 hover:border-zinc-400 text-zinc-400 hover:text-zinc-900 transition-colors z-20"
-                                    >
-                                        <i className="fa-solid fa-xmark text-[10px]"></i>
-                                    </button>
-                                </div>
-                            ))}
-
-                            <div
-                                onClick={() => handleTriggerFile(null)}
-                                onDragOver={(e) => onDragOver(e, 'add')}
-                                onDragLeave={onDragLeave}
-                                onDrop={(e) => onDrop(e, 'add')}
-                                className={`group relative aspect-square transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center dashed-border-tight hover:opacity-80
-                    ${draggingSlot === 'add' ? 'bg-zinc-50' : 'bg-white'}`}
-                            >
-                            </div>
+                                    <span>{resolution}</span>
+                                </button>
+                            )}
                         </div>
-                        <p className="text-[10px] text-zinc-400">
-                            Tap or drag images to guide the generation structure.
-                        </p>
+
+                        {/* Veo 2 duration slider */}
+                        {isVeo2 && (
+                            <div className="flex items-center gap-3 pt-1">
+                                <span className="text-[10px] text-zinc-400 uppercase tracking-widest">Length</span>
+                                <input
+                                    type="range" min={5} max={8} step={1}
+                                    value={duration}
+                                    onChange={(e) => setDuration(parseInt(e.target.value, 10))}
+                                    className="flex-1 accent-zinc-900"
+                                />
+                                <span className="text-[10px] text-zinc-600 w-6">{duration}s</span>
+                            </div>
+                        )}
                     </section>
 
-                    {/* Action Button - White Style */}
+                    {/* Start image (image-to-video) */}
+                    <section className="space-y-3">
+                        <label className="text-[10px] text-zinc-400 uppercase tracking-widest block">Start Frame (optional)</label>
+                        {startImage ? (
+                            <div
+                                onClick={handleTriggerFile}
+                                className="group relative aspect-video border border-zinc-200 bg-white overflow-hidden cursor-pointer"
+                            >
+                                <img src={startImage.previewUrl} className="w-full h-full object-cover" alt="Start frame" />
+                                <div className="absolute inset-0 bg-white/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                    <span className="text-[10px] font-medium text-zinc-800">Replace</span>
+                                </div>
+                                <button
+                                    onClick={removeStartImage}
+                                    className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-white border border-zinc-200 hover:border-zinc-400 text-zinc-400 hover:text-zinc-900 transition-colors z-20"
+                                >
+                                    <i className="fa-solid fa-xmark text-[10px]"></i>
+                                </button>
+                            </div>
+                        ) : (
+                            <div
+                                onClick={handleTriggerFile}
+                                onDragOver={onDragOver}
+                                onDragLeave={onDragLeave}
+                                onDrop={onDrop}
+                                className={`group relative aspect-video transition-all cursor-pointer flex items-center justify-center dashed-border-tight hover:opacity-80 ${draggingSlot ? 'bg-zinc-50' : 'bg-white'}`}
+                            >
+                                <span className="text-[10px] text-zinc-300">Tap or drag an image to animate</span>
+                            </div>
+                        )}
+                    </section>
+
+                    {/* Advanced: negative prompt */}
+                    <section className="space-y-3">
+                        <button
+                            onClick={() => setShowAdvanced(!showAdvanced)}
+                            className="text-[10px] text-zinc-400 hover:text-zinc-900 uppercase tracking-widest flex items-center gap-2 transition-colors"
+                        >
+                            <i className={`fa-solid ${showAdvanced ? 'fa-chevron-down' : 'fa-chevron-right'} text-[8px]`}></i>
+                            Advanced
+                        </button>
+                        {showAdvanced && (
+                            <textarea
+                                value={negativePrompt}
+                                onChange={(e) => setNegativePrompt(e.target.value)}
+                                placeholder="Negative prompt — what to avoid..."
+                                className="w-full h-20 bg-white border p-3 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-zinc-600"
+                            />
+                        )}
+                    </section>
+
+                    {/* Generate */}
                     <button
                         onClick={handleGenerate}
                         disabled={isGenerating}
-                        className={`w-full py-4 flex items-center justify-center transition-all rounded-none border border-zinc-500
+                        className={`w-full py-4 flex items-center justify-center gap-3 transition-all rounded-none border border-zinc-500
               ${isGenerating ? 'bg-zinc-50 border-zinc-200 cursor-not-allowed' : 'bg-white hover:bg-zinc-50 hover:border-zinc-400 active:bg-zinc-100'}`}
                     >
-                        {/* Using a generic loading/active indicator for White channel, or just the red dot as a brand signature if kept, but user asked for white button */}
                         <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-white border border-zinc-400'}`}></div>
+                        {isGenerating && <span className="text-[10px] text-zinc-500 tracking-widest">{progress || 'Working…'}</span>}
                     </button>
 
                     {error && (
                         <div className="flex items-center gap-2 mt-4 justify-center animate-in fade-in slide-in-from-top-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                            <span className="text-xs text-red-500 font-medium">{error.includes("quota") ? "Usage limit exceeded" : error}</span>
+                            <span className="text-xs text-red-500 font-medium">{error.includes('quota') ? 'Usage limit exceeded' : error}</span>
                             <button
                                 onClick={() => setShowKeyModal(true)}
                                 className="text-[10px] text-zinc-400 underline hover:text-zinc-600 ml-2"
@@ -179,32 +234,19 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                     )}
                 </div>
 
-                {/* Right Column: Results */}
+                {/* Right Column: Output */}
                 <div className="lg:col-span-8 flex flex-col h-full min-h-[50vh]">
                     <div className="flex-1 min-h-[400px] md:min-h-[600px] border border-zinc-200 bg-zinc-50 flex flex-col relative group">
-                        <div className="absolute top-4 left-4 z-10 flex gap-2">
-                            <button
-                                onClick={() => setPreviewMode('fill')}
-                                className={`px-3 py-1.5 text-[10px] border transition-all ${previewMode === 'fill' ? 'bg-zinc-100 text-zinc-900 border-zinc-400' : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300'}`}
-                            >
-                                Full
-                            </button>
-                            <button
-                                onClick={() => setPreviewMode('fit')}
-                                className={`px-3 py-1.5 text-[10px] border transition-all ${previewMode === 'fit' ? 'bg-zinc-100 text-zinc-900 border-zinc-400' : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300'}`}
-                            >
-                                Fit
-                            </button>
-                        </div>
-
                         {result && !isGenerating ? (
                             <div className="flex-1 flex items-center justify-center p-4 md:p-8 bg-white">
-                                <div className={`relative transition-all duration-300 bg-zinc-100 ${previewMode === 'fill' ? 'w-full aspect-video' : 'h-full aspect-square'}`}>
-                                    <img
-                                        id="generated-image"
-                                        src={result.imageUrl.startsWith('data:') ? result.imageUrl : `data:image/jpeg;base64,${result.imageUrl}`}
-                                        alt="Generated output"
-                                        className={`w-full h-full object-contain max-h-[70vh] ${previewMode === 'fill' ? 'object-cover' : 'object-contain'}`}
+                                <div className="relative w-full max-w-3xl">
+                                    <video
+                                        src={result.videoUrl}
+                                        controls
+                                        autoPlay
+                                        loop
+                                        playsInline
+                                        className="w-full max-h-[70vh] bg-black"
                                     />
                                     <div className="absolute bottom-4 right-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button
@@ -216,9 +258,14 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                     </div>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-300 space-y-4">
+                        ) : isGenerating ? (
+                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-400 space-y-4">
+                                <div className="w-2 h-2 rounded-full bg-zinc-400 animate-pulse"></div>
+                                <span className="text-[10px] tracking-[0.3em] uppercase">{progress || 'Rendering'}</span>
+                                <span className="text-[10px] text-zinc-300">Veo can take 1–3 minutes.</span>
                             </div>
+                        ) : (
+                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-300 space-y-4"></div>
                         )}
 
                         {result && !isGenerating && (
@@ -226,21 +273,11 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 <div className="flex items-center gap-2">
                                     <h4 className="text-xs font-medium text-zinc-900">Output</h4>
                                     <span className="text-[10px] text-zinc-300">·</span>
-                                    <p className="text-[10px] text-zinc-400">{imageSize}</p>
+                                    <p className="text-[10px] text-zinc-400">{result.aspectRatio}</p>
                                 </div>
                                 <div className="flex gap-4">
-                                    <button
-                                        onClick={() => setResult(null)}
-                                        className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
-                                    >
-                                        Reset
-                                    </button>
-                                    <button
-                                        onClick={() => reusePrompt(result.prompt)}
-                                        className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
-                                    >
-                                        Reuse
-                                    </button>
+                                    <button onClick={() => setResult(null)} className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs">Reset</button>
+                                    <button onClick={() => reusePrompt(result.prompt)} className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs">Reuse</button>
                                 </div>
                             </div>
                         )}
@@ -248,24 +285,27 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                 </div>
             </main>
 
-            {/* History Section */}
+            {/* History */}
             <section className="max-w-[1600px] mx-auto px-4 md:px-6 mt-12 md:mt-16 pb-20 border-t border-zinc-100 pt-8">
-                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 md:gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
                     {history.map((item) => (
-                        <div key={item.timestamp} className="group relative aspect-square bg-zinc-50 border border-zinc-100 overflow-hidden cursor-pointer hover:border-zinc-300 transition-colors"
+                        <div
+                            key={item.timestamp}
+                            className="group relative aspect-video bg-zinc-50 border border-zinc-100 overflow-hidden cursor-pointer hover:border-zinc-300 transition-colors"
                             onClick={() => restoreHistoryItem(item)}
                         >
-                            <img src={item.imageUrl.startsWith('data:') ? item.imageUrl : `data:image/jpeg;base64,${item.imageUrl}`} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" />
+                            <video src={item.videoUrl} muted loop playsInline className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                                onMouseEnter={(e) => (e.currentTarget as HTMLVideoElement).play()}
+                                onMouseLeave={(e) => (e.currentTarget as HTMLVideoElement).pause()}
+                            />
                         </div>
                     ))}
                 </div>
                 {history.length === 0 && (
-                    <div className="text-center py-10 text-xs text-zinc-300">
-                        No history yet.
-                    </div>
+                    <div className="text-center py-10 text-xs text-zinc-300">No videos yet.</div>
                 )}
             </section>
-        </div >
+        </div>
     );
 };
 
