@@ -197,12 +197,19 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                     <button
                         onClick={handleGenerate}
                         disabled={isGenerating}
-                        className={`w-full py-4 flex items-center justify-center gap-3 transition-all rounded-none border border-zinc-500
-              ${isGenerating ? 'bg-zinc-50 border-zinc-200 cursor-not-allowed' : 'bg-white hover:bg-zinc-50 hover:border-zinc-400 active:bg-zinc-100'}`}
+                        className={`w-full py-4 flex items-center justify-center gap-3 transition-all rounded-none border
+              ${isGenerating
+                                ? 'bg-zinc-100 border-zinc-200 text-zinc-500 cursor-not-allowed'
+                                : 'bg-zinc-900 border-zinc-900 text-white hover:bg-zinc-800 active:bg-black'}`}
                     >
-                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-white border border-zinc-400'}`}></div>
-                        {isGenerating && <span className="text-[10px] text-zinc-500 tracking-widest">{progress || 'Working…'}</span>}
+                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-white'}`}></div>
+                        <span className="text-xs font-medium tracking-widest uppercase">
+                            {isGenerating ? (progress || 'Working…') : 'Generate Video'}
+                        </span>
                     </button>
+                    {isGenerating && (
+                        <p className="text-[10px] text-zinc-400 text-center -mt-3">Veo usually takes 60–90 seconds. Keep this tab open.</p>
+                    )}
 
                     {error && (
                         <div className="flex items-center gap-2 mt-4 justify-center animate-in fade-in slide-in-from-top-1">
