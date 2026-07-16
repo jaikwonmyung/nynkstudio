@@ -117,7 +117,15 @@ export const useVideoGenerationLogic = ({ apiKey, setShowKeyModal }: UseVideoLog
                 model,
             };
             setResult(newResult);
-            setHistory((prev) => [newResult, ...prev].slice(0, 12));
+            setHistory((prev) => {
+                const next = [newResult, ...prev];
+                // Object URLs live until revoked; free the ones that fall out of
+                // the 12-item window so long sessions don't leak blob memory.
+                next.slice(12).forEach((v) => {
+                    try { URL.revokeObjectURL(v.videoUrl); } catch {}
+                });
+                return next.slice(0, 12);
+            });
         } catch (err: any) {
             console.error(err);
             const msg = err?.message || 'Video generation failed. Please try again.';

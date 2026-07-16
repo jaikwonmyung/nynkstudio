@@ -215,6 +215,11 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                                     </div>
                                 </div>
                             </div>
+                        ) : isGenerating ? (
+                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-400 space-y-4">
+                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                <span className="text-[10px] tracking-[0.3em] uppercase">Generating</span>
+                            </div>
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center text-zinc-300 space-y-4">
                             </div>

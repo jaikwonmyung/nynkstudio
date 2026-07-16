@@ -42,9 +42,25 @@ export const useGenerationLogic = ({ apiKey, setShowKeyModal }: UseGenerationLog
     }, []);
 
     const addToHistory = (newResult: GenerationResult) => {
-        const updated = [newResult, ...history].slice(0, 20);
-        setHistory(updated);
-        localStorage.setItem('nynk_history', JSON.stringify(updated));
+        setHistory(prev => {
+            const updated = [newResult, ...prev].slice(0, 20);
+            // 4K images are large base64 blobs; localStorage caps at ~5MB. If the
+            // write overflows the quota, drop the oldest entries until it fits so
+            // history saving never fails silently.
+            let toStore = updated;
+            while (toStore.length > 0) {
+                try {
+                    localStorage.setItem('nynk_history', JSON.stringify(toStore));
+                    break;
+                } catch (e) {
+                    toStore = toStore.slice(0, -1); // drop the oldest and retry
+                    if (toStore.length === 0) {
+                        try { localStorage.removeItem('nynk_history'); } catch {}
+                    }
+                }
+            }
+            return updated;
+        });
     };
 
     const processFile = (file: File, index: number | null) => {
@@ -111,6 +127,15 @@ export const useGenerationLogic = ({ apiKey, setShowKeyModal }: UseGenerationLog
 
     const handleGenerate = async () => {
         if (isGenerating) return;
+        if (!prompt.trim() && references.length === 0) {
+            setError('Enter a prompt or add a reference image.');
+            return;
+        }
+        if (!apiKey) {
+            setShowKeyModal(true);
+            return;
+        }
+
         setIsGenerating(true);
         setError(null);
 
@@ -120,11 +145,6 @@ export const useGenerationLogic = ({ apiKey, setShowKeyModal }: UseGenerationLog
         }));
 
         try {
-            if (!apiKey) {
-                setShowKeyModal(true);
-                return;
-            }
-
             const imageUrl = await generateImage(apiKey, prompt, imagesToPass, {
                 size: imageSize,
                 aspectRatio: aspectRatio,
