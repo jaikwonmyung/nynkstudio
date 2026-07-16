@@ -10,7 +10,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === 'Nynk486!') {
+        if (password === '1211') {
             onLogin();
         } else {
             setError('Incorrect password');
