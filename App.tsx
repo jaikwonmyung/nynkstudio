@@ -3,8 +3,17 @@ import LoginPage from './src/components/LoginPage';
 import SplitLandingPage from './src/components/SplitLandingPage';
 import RedGenerationPage from './src/components/RedGenerationPage';
 import WhiteGenerationPage from './src/components/WhiteGenerationPage';
+import LockPage from './src/components/LockPage';
+
+// TEMPORARY LOCK: while true, the entire site is replaced by the 402 lock page.
+// To unlock, set this back to false (or revert the lock commit) and push.
+const SITE_LOCKED = true;
 
 const App: React.FC = () => {
+  if (SITE_LOCKED) {
+    return <LockPage />;
+  }
+
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [tempKey, setTempKey] = useState('');
