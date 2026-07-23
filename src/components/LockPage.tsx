@@ -5,10 +5,15 @@ import React from 'react';
  * SITE_LOCKED is true in App.tsx. Styled as an official "402 Payment Required"
  * system notice. To unlock: set SITE_LOCKED back to false (or revert this work).
  */
-const LockPage: React.FC = () => {
+interface LockPageProps {
+  /** Discreet hidden control to slip back into the app. */
+  onEnter?: () => void;
+}
+
+const LockPage: React.FC<LockPageProps> = ({ onEnter }) => {
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-[#0a0a0a] text-zinc-200 p-6"
+      className="relative min-h-screen w-full flex items-center justify-center bg-[#0a0a0a] text-zinc-200 p-6"
       style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace' }}
     >
       <div className="w-full max-w-xl border border-zinc-800 bg-[#0d0d0d]">
@@ -74,6 +79,15 @@ const LockPage: React.FC = () => {
           © NYNK STUDIO — ALL SESSIONS TERMINATED
         </div>
       </div>
+
+      {/* Hidden entry — nearly invisible dot in the bottom-right corner.
+          Click it to slip back into the app. */}
+      <button
+        type="button"
+        onClick={onEnter}
+        aria-label="Enter"
+        className="fixed bottom-3 right-3 h-4 w-4 rounded-full bg-transparent hover:bg-zinc-700/40 transition-colors focus:outline-none"
+      />
     </div>
   );
 };

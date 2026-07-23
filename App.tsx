@@ -10,16 +10,19 @@ import LockPage from './src/components/LockPage';
 const SITE_LOCKED = true;
 
 const App: React.FC = () => {
-  if (SITE_LOCKED) {
-    return <LockPage />;
-  }
-
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [tempKey, setTempKey] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState<'red' | 'white' | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  // When the site is locked, a discreet hidden control on the lock page can flip
+  // this to true to let the visitor back into the app.
+  const [lockBypassed, setLockBypassed] = useState(false);
+
+  if (SITE_LOCKED && !lockBypassed) {
+    return <LockPage onEnter={() => setLockBypassed(true)} />;
+  }
 
   // SECURITY: the API key is NEVER persisted (no localStorage, no baked-in env
   // key). It lives only in memory for the current session, so every time the
