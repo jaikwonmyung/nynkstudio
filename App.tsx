@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import LockPage from './src/components/LockPage';
 import LoginPage from './src/components/LoginPage';
 import SplitLandingPage from './src/components/SplitLandingPage';
 import RedGenerationPage from './src/components/RedGenerationPage';
 import WhiteGenerationPage from './src/components/WhiteGenerationPage';
 
+// Site-wide lock. When true, everyone sees the fake blue screen (LockPage);
+// the invisible dot in its bottom-right corner enters the studio.
+// Set to false to open the site up again.
+const SITE_LOCKED = true;
+
 const App: React.FC = () => {
+  const [lockBypassed, setLockBypassed] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [tempKey, setTempKey] = useState('');
@@ -26,6 +33,10 @@ const App: React.FC = () => {
     setTempKey('');
     setShowKeyModal(true);
   };
+
+  if (SITE_LOCKED && !lockBypassed) {
+    return <LockPage onEnter={() => setLockBypassed(true)} />;
+  }
 
   if (!isAuthenticated) {
     return <LoginPage onLogin={() => setIsAuthenticated(true)} />;
