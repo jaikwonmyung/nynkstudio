@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nynk studio</title>
+    <title>SM AI Studio</title>
+    <meta name="theme-color" content="#FFE1E9">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -12,15 +13,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         @font-face {
-            font-family: 'Cormorant Garamond';
-            src: url('/fonts/CormorantGaramond-Light.ttf') format('truetype');
-            font-weight: 300;
+            font-family: 'SMTOWN';
+            src: url('/fonts/SMTOWN-Regular.otf') format('opentype');
+            font-weight: 300 700;
             font-style: normal;
+            font-display: swap;
         }
 
         body {
-            font-family: 'Cormorant Garamond', serif;
-            background-color: #ffffff;
+            font-family: 'SMTOWN', sans-serif;
+            background-color: #FFE1E9;
             color: #1a1a1a;
         }
 
@@ -29,24 +31,33 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #18181b;
+            background: #FFE1E9;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
+            background: #F0C8D5;
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #52525b;
+            background: #E2AEBF;
         }
 
         .dashed-border-tight {
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='0' ry='0' stroke='%23E4E4E7' stroke-width='1' stroke-dasharray='2%2c 2' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='0' ry='0' stroke='%23F0C8D5' stroke-width='1' stroke-dasharray='2%2c 2' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
         }
 
         .dashed-border-tight:hover {
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='0' ry='0' stroke='%2352525B' stroke-width='1' stroke-dasharray='2%2c 2' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='0' ry='0' stroke='%23C98BA0' stroke-width='1' stroke-dasharray='2%2c 2' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+        }
+
+        /* SM brand mark — replaces the text wordmark, layout untouched */
+        .sm-mark {
+            display: block;
+            width: 190px;
+            max-width: 60vw;
+            height: auto;
+            margin: 0 auto;
         }
     </style>
     <script type="importmap">

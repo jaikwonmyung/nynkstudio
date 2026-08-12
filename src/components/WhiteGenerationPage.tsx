@@ -52,7 +52,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
     };
 
     return (
-        <div className="min-h-screen bg-white text-zinc-900 pb-20">
+        <div className="min-h-screen bg-[#FFE1E9] text-zinc-900 pb-20">
             <input
                 ref={fileInputRef}
                 type="file"

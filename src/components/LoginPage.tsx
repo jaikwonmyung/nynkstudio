@@ -18,10 +18,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white text-zinc-900 p-6">
+        <div className="min-h-screen flex items-center justify-center bg-[#FFE1E9] text-zinc-900 p-6">
             <div className="w-full max-w-sm">
                 <div className="flex justify-center mb-8">
-                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                    <img src="/sm-logo.png" alt="SM Entertainment Group" className="sm-mark" />
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">

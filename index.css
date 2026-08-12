@@ -1,0 +1,19 @@
+/* SM palette tokens.
+   index.html already linked this file but it did not exist (404 in dev);
+   it now holds the brand tokens so colours live in one place. */
+
+:root {
+  --sm-base: #FFE1E9;
+  /* key color — page ground */
+  --sm-panel: #ffffff;
+  /* cards, headers, popovers — keeps the layer contrast */
+  --sm-ink: #1a1a1a;
+  /* matches the logo linework */
+  --sm-line: #F0C8D5;
+  --sm-line-strong: #E2AEBF;
+}
+
+::selection {
+  background: var(--sm-ink);
+  color: var(--sm-base);
+}

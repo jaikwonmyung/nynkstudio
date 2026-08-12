@@ -46,9 +46,9 @@ const App: React.FC = () => {
   // is kept in memory only and is required again on every visit/reload.
   if (!apiKey || showKeyModal) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-6">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFE1E9] p-6">
         <div className="max-w-md w-full text-center space-y-6 bg-white p-8 border border-zinc-200">
-          <h1 className="text-xl font-medium tracking-tight text-zinc-800">nynk studio</h1>
+          <img src="/sm-logo.png" alt="SM Entertainment Group" className="sm-mark" />
           <p className="text-zinc-500 text-xs">
             Enter your Gemini API Key to access the studio.
           </p>
