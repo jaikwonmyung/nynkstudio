@@ -80,7 +80,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                 onClearKey={handleClearKey}
             />
 
-            <main className="max-w-[1600px] mx-auto px-4 md:px-6 mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+            <main className="sm-fade max-w-[1600px] mx-auto px-4 md:px-6 mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
                 {/* Left Column: Inputs */}
                 <div className="lg:col-span-4 space-y-6 md:space-y-8">
                     {/* Prompt Section */}
@@ -104,7 +104,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                             {/* Engine Selection Toggle */}
                             <button
                                 onClick={() => setEngineType(engineType === '4K' ? 'NANOBANANA2' : '4K')}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#8A737B] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                className="sm-lift inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#8A737B] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <span>{engineType === '4K' ? '4K ULTRA' : 'NANOBANANA 2'}</span>
                                 <div className={`w-1 h-1 rounded-full ${engineType === 'NANOBANANA2' ? 'bg-[#223055]' : 'bg-[#E2AEBF]'}`}></div>

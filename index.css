@@ -1,19 +1,200 @@
-/* SM palette tokens.
+/* SM palette + motion layer.
    index.html already linked this file but it did not exist (404 in dev);
-   it now holds the brand tokens so colours live in one place. */
+   it now holds the brand tokens and the shared motion rules. */
 
 :root {
+  /* ground */
   --sm-base: #FFE1E9;
-  /* key color — page ground */
-  --sm-panel: #ffffff;
-  /* cards, headers, popovers — keeps the layer contrast */
-  --sm-ink: #1a1a1a;
-  /* matches the logo linework */
+  --sm-base-deep: #FBD3DE;
   --sm-line: #F0C8D5;
   --sm-line-strong: #E2AEBF;
+
+  /* ink */
+  --sm-ink: #1a1a1a;
+  --sm-muted: #6B5A60;
+  --sm-faint: #8A737B;
+
+  /* SM Group navy, with mid-tones so the jump from the pale ground is not raw */
+  --sm-navy: #223055;
+  /* CI value — accents, type, active states */
+  --sm-navy-deep: #1B2745;
+  --sm-navy-soft: #33406B;
+  /* large fields, where the CI value alone reads heavy */
+  --sm-navy-mid: #6E799A;
+  --sm-navy-tint: #C7CDDC;
+  --sm-navy-wash: #EDEFF5;
 }
 
 ::selection {
-  background: var(--sm-ink);
-  color: var(--sm-base);
+  background: var(--sm-navy);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------- cursor */
+
+/* Both layers are transform-driven from a single rAF loop (see Cursor.tsx).
+   `will-change` promotes them once, so no per-frame layer churn. */
+.sm-cursor-dot,
+.sm-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  border-radius: 9999px;
+}
+
+.sm-cursor-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--sm-navy);
+  transition: opacity .25s ease;
+}
+
+.sm-cursor-ring {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(34, 48, 85, .38);
+  /* only colour/size transition here — the movement is rAF, not CSS */
+  transition: opacity .25s ease, border-color .25s ease, background-color .25s ease,
+    width .2s ease, height .2s ease, border-radius .2s ease;
+}
+
+.sm-cursor-ring.is-active {
+  border-color: rgba(34, 48, 85, .75);
+  background: rgba(34, 48, 85, .06);
+}
+
+/* over a text field the ring becomes a caret-like bar, so the I-beam
+   affordance survives hiding the native cursor */
+.sm-cursor-ring.is-text {
+  width: 2px;
+  height: 26px;
+  border-radius: 1px;
+  background: var(--sm-navy);
+  border-color: transparent;
+}
+
+body.sm-cursor-on,
+body.sm-cursor-on * {
+  cursor: none !important;
+}
+
+/* ---------------------------------------------------------------- motion */
+
+/* Entrances. transform + opacity only, so these composite on the GPU and
+   never trigger layout. */
+@keyframes sm-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes sm-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.sm-rise {
+  animation: sm-rise .5s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+.sm-fade {
+  animation: sm-fade .6s ease both;
+}
+
+/* stagger helpers — cheap, no JS */
+.sm-d1 {
+  animation-delay: .06s;
+}
+
+.sm-d2 {
+  animation-delay: .12s;
+}
+
+.sm-d3 {
+  animation-delay: .18s;
+}
+
+.sm-d4 {
+  animation-delay: .24s;
+}
+
+/* Interactive lift. Restricted to transform so hovering never reflows. */
+.sm-lift {
+  transition: transform .28s cubic-bezier(.22, .61, .36, 1), opacity .28s ease;
+}
+
+.sm-lift:hover {
+  transform: translate3d(0, -1px, 0);
+}
+
+.sm-lift:active {
+  transform: translate3d(0, 0, 0) scale(.995);
+}
+
+/* Underline that draws in from the left — scaleX only. */
+.sm-underline {
+  position: relative;
+}
+
+.sm-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .35s cubic-bezier(.22, .61, .36, 1);
+}
+
+.sm-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Landing halves: a slow, weighty scale. */
+.sm-panel {
+  transition: transform .7s cubic-bezier(.22, .61, .36, 1), opacity .5s ease;
+  will-change: transform;
+}
+
+.sm-panel:hover {
+  transform: scale(1.012);
+}
+
+/* Everything above is opt-in per element; this switches all of it off for
+   users who asked their OS for less motion. */
+@media (prefers-reduced-motion: reduce) {
+
+  .sm-rise,
+  .sm-fade,
+  .sm-panel,
+  .sm-lift,
+  .sm-underline::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .sm-cursor-dot,
+  .sm-cursor-ring {
+    display: none;
+  }
 }

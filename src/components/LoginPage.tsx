@@ -19,7 +19,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#FFE1E9] text-zinc-900 p-6">
-            <div className="w-full max-w-sm">
+            <div className="w-full max-w-sm sm-rise">
                 <div className="flex justify-center mb-8">
                     <img src="/sm-logo.png" alt="SM Entertainment Group" className="sm-mark" />
                 </div>

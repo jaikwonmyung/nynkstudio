@@ -4,6 +4,8 @@ import LoginPage from './src/components/LoginPage';
 import SplitLandingPage from './src/components/SplitLandingPage';
 import RedGenerationPage from './src/components/RedGenerationPage';
 import WhiteGenerationPage from './src/components/WhiteGenerationPage';
+import GuidePage from './src/components/GuidePage';
+import Cursor from './src/components/Cursor';
 
 // Site-wide lock. When true, everyone sees the fake blue screen (LockPage);
 // the invisible dot in its bottom-right corner enters the studio.
@@ -18,6 +20,7 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState<'red' | 'white' | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
 
   // SECURITY: the API key is NEVER persisted (no localStorage, no baked-in env
   // key). It lives only in memory for the current session, so every time the
@@ -34,22 +37,49 @@ const App: React.FC = () => {
     setShowKeyModal(true);
   };
 
+  // The lock screen is a disguise: it deliberately keeps the system cursor and
+  // no motion, because it has to read as a real crash. So it renders alone.
   if (SITE_LOCKED && !lockBypassed) {
     return <LockPage onEnter={() => setLockBypassed(true)} />;
   }
 
-  if (!isAuthenticated) {
-    return <LoginPage onLogin={() => setIsAuthenticated(true)} />;
-  }
+  return (
+    <>
+      <Cursor />
+      {renderPage()}
+      {/* Guide is reachable from every screen past the lock — including the
+          login and API-key steps, which is exactly where a first-time user
+          needs it. */}
+      {!showGuide && (
+        <button
+          onClick={() => setShowGuide(true)}
+          aria-label="Open usage guide"
+          className="sm-lift fixed bottom-5 right-5 z-[90] flex items-center gap-2 py-2 px-3 border border-[#E2AEBF] bg-[#FFE1E9] text-[10px] tracking-[0.3em] uppercase text-[#223055] hover:border-[#223055] transition-colors"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#223055] inline-block"></span>
+          Guide
+        </button>
+      )}
+    </>
+  );
+
+  function renderPage() {
+    if (showGuide) {
+      return <GuidePage onBack={() => setShowGuide(false)} />;
+    }
+
+    if (!isAuthenticated) {
+      return <LoginPage onLogin={() => setIsAuthenticated(true)} />;
+    }
 
   // Ask for the API key right after login (before channel selection). The key
   // is kept in memory only and is required again on every visit/reload.
   if (!apiKey || showKeyModal) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FFE1E9] p-6">
-        <div className="max-w-md w-full text-center space-y-6 bg-[#FFE1E9] p-8 border border-[#F0C8D5]">
+        <div className="sm-rise max-w-md w-full text-center space-y-6 bg-[#FFE1E9] p-8 border border-[#F0C8D5]">
           <img src="/sm-logo.png" alt="SM Entertainment Group" className="sm-mark" />
-          <p className="text-zinc-500 text-xs">
+          <p className="text-[#6B5A60] text-xs">
             Enter your Gemini API Key to access the studio.
           </p>
           <input
@@ -59,11 +89,11 @@ const App: React.FC = () => {
             onKeyDown={(e) => { if (e.key === 'Enter') handleSaveKey(); }}
             placeholder="Paste API Key here..."
             autoFocus
-            className="w-full bg-[#FFE1E9] border border-[#F0C8D5] p-3 text-zinc-900 text-xs outline-none focus:border-[#223055] transition-colors rounded-none placeholder:text-zinc-300"
+            className="w-full bg-[#FFE1E9] border border-[#F0C8D5] p-3 text-zinc-900 text-xs outline-none focus:border-[#223055] transition-colors rounded-none placeholder:text-[#B08E9B]"
           />
           <button
             onClick={handleSaveKey}
-            className="w-full py-3 bg-[#FFE1E9] hover:bg-[#FBD3DE] border border-[#F0C8D5] text-zinc-900 transition-colors text-sm font-medium rounded-none"
+            className="sm-lift w-full py-3 bg-[#FFE1E9] hover:bg-[#FBD3DE] border border-[#F0C8D5] text-zinc-900 transition-colors text-sm font-medium rounded-none"
           >
             Enter Studio
           </button>
@@ -71,11 +101,11 @@ const App: React.FC = () => {
             href="https://aistudio.google.com/app/apikey"
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-zinc-400 hover:text-zinc-900 block mt-4"
+            className="sm-underline inline-block text-xs text-[#8A737B] hover:text-[#223055] mt-4"
           >
             Get API Key
           </a>
-          <p className="text-[10px] text-zinc-300 pt-2">
+          <p className="text-[10px] text-[#B08E9B] pt-2">
             For your security, the key is not saved — enter it each visit.
           </p>
         </div>
@@ -110,6 +140,7 @@ const App: React.FC = () => {
         handleClearKey={handleClearKey}
       />
     );
+  }
   }
 };
 

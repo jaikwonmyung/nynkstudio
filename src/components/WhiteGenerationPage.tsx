@@ -101,7 +101,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                 </div>
             )}
 
-            <main className="max-w-[1600px] mx-auto px-4 md:px-6 mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+            <main className="sm-fade max-w-[1600px] mx-auto px-4 md:px-6 mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
                 {/* Left Column: Inputs */}
                 <div className="lg:col-span-4 space-y-6 md:space-y-8">
                     {/* Prompt */}
@@ -117,7 +117,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         <div className="flex flex-wrap items-center gap-2">
                             <button
                                 onClick={cycleModel}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                className="sm-lift inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <span>{MODEL_LABELS[modelKey]}</span>
                                 <div className="w-1 h-1 rounded-full bg-[#223055]"></div>
@@ -125,7 +125,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
 
                             <button
                                 onClick={() => setAspectRatio(aspectRatio === '16:9' ? '9:16' : '16:9')}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                className="sm-lift inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <div className={`border border-current ${aspectRatio === '16:9' ? 'w-4 h-2.5' : 'w-2.5 h-4'}`}></div>
                                 <span>{aspectRatio}</span>
@@ -134,7 +134,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             {canDoHD && (
                                 <button
                                     onClick={() => setResolution(resolution === '720p' ? '1080p' : '720p')}
-                                    className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                    className="sm-lift inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                                 >
                                     <span>{resolution}</span>
                                 </button>
