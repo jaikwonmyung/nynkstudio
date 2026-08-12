@@ -22,14 +22,50 @@ const App: React.FC = () => {
   const [selectedChannel, setSelectedChannel] = useState<'red' | 'white' | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [keyError, setKeyError] = useState('');
+  const [checkingKey, setCheckingKey] = useState(false);
 
   // SECURITY: the API key is NEVER persisted (no localStorage, no baked-in env
   // key). It lives only in memory for the current session, so every time the
   // site is opened/reloaded the user must paste their own key again.
-  const handleSaveKey = () => {
-    if (!tempKey.trim()) return;
-    setApiKey(tempKey.trim());
-    setShowKeyModal(false);
+  // The gate used to accept any non-empty string, so a stray character or a
+  // browser autofill let you in and the bad key only surfaced later as a failed
+  // generation. Verify the key against the API before opening the studio.
+  const handleSaveKey = async () => {
+    const key = tempKey.trim();
+    if (!key) {
+      setKeyError('API 키를 입력해 주세요.');
+      return;
+    }
+    // Cheap shape check first, so an obvious paste error fails instantly
+    // without a round trip.
+    if (!/^AIza[A-Za-z0-9_-]{30,}$/.test(key)) {
+      setKeyError('키 형식이 올바르지 않습니다. Google AI Studio에서 발급받은 키를 그대로 붙여넣어 주세요.');
+      return;
+    }
+
+    setCheckingKey(true);
+    setKeyError('');
+    try {
+      // ListModels is the lightest authenticated call available.
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`
+      );
+      if (!res.ok) {
+        setKeyError(
+          res.status === 400 || res.status === 403
+            ? '이 키로는 접속할 수 없습니다. 키가 맞는지, 사용 설정이 되어 있는지 확인해 주세요.'
+            : `키를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요. (오류 ${res.status})`
+        );
+        return;
+      }
+      setApiKey(key);
+      setShowKeyModal(false);
+    } catch {
+      setKeyError('네트워크에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      setCheckingKey(false);
+    }
   };
 
   const handleClearKey = () => {
@@ -87,17 +123,21 @@ const App: React.FC = () => {
           <input
             type="password"
             value={tempKey}
-            onChange={(e) => setTempKey(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') handleSaveKey(); }}
+            onChange={(e) => { setTempKey(e.target.value); setKeyError(''); }}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !checkingKey) handleSaveKey(); }}
             placeholder="API 키를 붙여넣어 주세요"
             autoFocus
             className="w-full bg-[#FFE1E9] border border-[#F0C8D5] p-3 text-zinc-900 text-xs outline-none focus:border-[#223055] transition-colors rounded-none placeholder:text-[#B08E9B]"
           />
+          {keyError && (
+            <p className="text-red-600 text-xs leading-relaxed text-left">{keyError}</p>
+          )}
           <button
             onClick={handleSaveKey}
-            className="sm-lift w-full py-3 bg-[#FFE1E9] hover:bg-[#FBD3DE] border border-[#F0C8D5] text-zinc-900 transition-colors text-sm font-medium rounded-none"
+            disabled={checkingKey}
+            className="sm-lift w-full py-3 bg-[#FFE1E9] hover:bg-[#FBD3DE] border border-[#F0C8D5] text-zinc-900 transition-colors text-sm font-medium rounded-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            스튜디오 입장
+            {checkingKey ? '키 확인 중…' : '스튜디오 입장'}
           </button>
           <a
             href="https://aistudio.google.com/app/apikey"
