@@ -1,11 +1,12 @@
 import React from 'react';
+import BrandField from './BrandField';
 
 interface GuidePageProps {
     onBack: () => void;
 }
 
 const Section: React.FC<{ index: string; title: string; children: React.ReactNode }> = ({ index, title, children }) => (
-    <section className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 border-t border-[#F0C8D5]">
+    <section className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 border-t border-[#F0C8D5]">
         <div className="md:col-span-3">
             <div className="flex items-baseline gap-3 md:sticky md:top-24">
                 <span className="text-[10px] tracking-[0.3em] text-[#8A737B]">{index}</span>
@@ -26,7 +27,7 @@ const Row: React.FC<{ label: string; children: React.ReactNode }> = ({ label, ch
 );
 
 const Key: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <span className="inline-block px-1.5 py-0.5 border border-[#E2AEBF] text-[11px] tracking-wide text-[#223055] align-middle">
+    <span className="inline-block px-2.5 py-0.5 rounded-full border border-[#E2AEBF] text-[11px] tracking-wide text-[#223055] align-middle">
         {children}
     </span>
 );
@@ -37,22 +38,23 @@ const GuidePage: React.FC<GuidePageProps> = ({ onBack }) => {
             <header className="border-b border-[#F0C8D5] py-3 px-4 md:py-4 md:px-6 flex justify-between items-center bg-[#FFE1E9] sticky top-0 z-50">
                 <button
                     onClick={onBack}
-                    className="sm-lift flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-[#6B5A60] hover:text-[#223055] transition-colors"
+                    className="sm-lift flex items-center gap-3 py-2 px-4 rounded-full border border-[#F0C8D5] text-[11px] tracking-[0.2em] text-[#6B5A60] hover:text-[#223055] hover:border-[#223055] transition-colors"
                 >
-                    <span className="w-3 h-3 rounded-full border border-[#223055] inline-block"></span>
-                    Back
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#223055] inline-block"></span>
+                    돌아가기
                 </button>
-                <span className="text-[10px] tracking-[0.3em] uppercase text-[#8A737B]">Guide</span>
+                <span className="text-[10px] tracking-[0.3em] uppercase text-[#8A737B]">Guide · 사용 가이드</span>
             </header>
 
-            <main className="max-w-[1100px] mx-auto px-4 md:px-6">
+            <main className="max-w-[1100px] mx-auto px-4 md:px-6 relative">
+                <BrandField className="absolute top-0 left-0 w-full h-[520px] opacity-60" />
                 {/* Masthead */}
-                <div className="pt-16 pb-12 sm-rise">
+                <div className="pt-16 pb-12 sm-rise relative z-10">
                     <img src="/sm-logo.png" alt="SM Entertainment Group" className="w-[190px] max-w-[60vw] mb-8" />
                     <h1 className="text-2xl md:text-3xl tracking-tight text-[#223055]">AI Studio 사용 가이드</h1>
                     <p className="mt-3 text-[13px] text-[#6B5A60] max-w-xl leading-relaxed">
-                        이미지와 영상을 프롬프트로 생성하는 사내 도구입니다. 처음 쓰신다면 01번부터
-                        순서대로 따라오시면 됩니다.
+                        만나서 반갑습니다. 이곳은 문장 하나로 이미지와 영상을 만들어 보는 사내 스튜디오입니다.
+                        처음이시라면 01번부터 천천히 따라와 주세요. 어렵지 않습니다.
                     </p>
                 </div>
 
@@ -209,9 +211,21 @@ const GuidePage: React.FC<GuidePageProps> = ({ onBack }) => {
                     </div>
                 </Section>
 
-                <div className="pt-12 flex items-center justify-between text-[10px] tracking-[0.25em] uppercase text-[#8A737B]">
-                    <span>SM Entertainment Group</span>
-                    <button onClick={onBack} className="sm-underline text-[#223055]">Back to Studio</button>
+                <div className="relative z-10 pt-14 border-t border-[#F0C8D5] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                        <div className="text-[10px] tracking-[0.25em] uppercase text-[#223055]">
+                            SM Entertainment Vision &amp; eXperience(VX) Center
+                        </div>
+                        <div className="text-[10px] tracking-[0.12em] text-[#A8919A]">
+                            The Future of Culture Technology
+                        </div>
+                    </div>
+                    <button
+                        onClick={onBack}
+                        className="sm-lift py-2.5 px-5 rounded-full border border-[#223055] text-[11px] tracking-[0.2em] text-[#223055] hover:bg-[#223055] hover:text-white transition-colors"
+                    >
+                        스튜디오로 돌아가기
+                    </button>
                 </div>
             </main>
         </div>

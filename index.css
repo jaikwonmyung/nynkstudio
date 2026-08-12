@@ -50,28 +50,35 @@
   width: 5px;
   height: 5px;
   background: var(--sm-navy);
-  transition: opacity .25s ease;
+  transition: opacity .16s ease;
 }
 
+/* Resting state is a capsule — the same stadium geometry as the SM mark. */
 .sm-cursor-ring {
-  width: 30px;
-  height: 30px;
-  border: 1px solid rgba(34, 48, 85, .38);
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(34, 48, 85, .4);
   /* only colour/size transition here — the movement is rAF, not CSS */
-  transition: opacity .25s ease, border-color .25s ease, background-color .25s ease,
-    width .2s ease, height .2s ease, border-radius .2s ease;
+  transition: opacity .16s ease, border-color .16s ease, background-color .16s ease,
+    width .16s cubic-bezier(.22, .61, .36, 1), height .16s cubic-bezier(.22, .61, .36, 1),
+    border-radius .16s ease;
 }
 
+/* Over anything clickable it opens into a rounded box, echoing the hover
+   treatment on the SM corporate site. */
 .sm-cursor-ring.is-active {
-  border-color: rgba(34, 48, 85, .75);
-  background: rgba(34, 48, 85, .06);
+  width: 62px;
+  height: 34px;
+  border-radius: 17px;
+  border-color: rgba(34, 48, 85, .8);
+  background: rgba(34, 48, 85, .07);
 }
 
 /* over a text field the ring becomes a caret-like bar, so the I-beam
    affordance survives hiding the native cursor */
 .sm-cursor-ring.is-text {
   width: 2px;
-  height: 26px;
+  height: 24px;
   border-radius: 1px;
   background: var(--sm-navy);
   border-color: transparent;

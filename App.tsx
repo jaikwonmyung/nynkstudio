@@ -6,6 +6,7 @@ import RedGenerationPage from './src/components/RedGenerationPage';
 import WhiteGenerationPage from './src/components/WhiteGenerationPage';
 import GuidePage from './src/components/GuidePage';
 import Cursor from './src/components/Cursor';
+import BrandField from './src/components/BrandField';
 
 // Site-wide lock. When true, everyone sees the fake blue screen (LockPage);
 // the invisible dot in its bottom-right corner enters the studio.
@@ -53,11 +54,11 @@ const App: React.FC = () => {
       {!showGuide && (
         <button
           onClick={() => setShowGuide(true)}
-          aria-label="Open usage guide"
-          className="sm-lift fixed bottom-5 right-5 z-[90] flex items-center gap-2 py-2 px-3 border border-[#E2AEBF] bg-[#FFE1E9] text-[10px] tracking-[0.3em] uppercase text-[#223055] hover:border-[#223055] transition-colors"
+          aria-label="사용 가이드 열기"
+          className="sm-lift fixed bottom-5 right-5 z-[90] flex items-center gap-2 py-2.5 px-4 rounded-full border border-[#E2AEBF] bg-[#FFE1E9] text-[11px] tracking-[0.2em] text-[#223055] hover:border-[#223055] transition-colors"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#223055] inline-block"></span>
-          Guide
+          가이드
         </button>
       )}
     </>
@@ -76,18 +77,19 @@ const App: React.FC = () => {
   // is kept in memory only and is required again on every visit/reload.
   if (!apiKey || showKeyModal) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFE1E9] p-6">
-        <div className="sm-rise max-w-md w-full text-center space-y-6 bg-[#FFE1E9] p-8 border border-[#F0C8D5]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFE1E9] p-6 relative overflow-hidden">
+        <BrandField className="absolute inset-0 w-full h-full opacity-70" />
+        <div className="sm-rise relative z-10 max-w-md w-full text-center space-y-6 bg-[#FFE1E9] p-8 border border-[#F0C8D5]">
           <img src="/sm-logo.png" alt="SM Entertainment Group" className="sm-mark" />
           <p className="text-[#6B5A60] text-xs">
-            Enter your Gemini API Key to access the studio.
+            스튜디오에 들어가려면 Gemini API 키를 입력해 주세요.
           </p>
           <input
             type="password"
             value={tempKey}
             onChange={(e) => setTempKey(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') handleSaveKey(); }}
-            placeholder="Paste API Key here..."
+            placeholder="API 키를 붙여넣어 주세요"
             autoFocus
             className="w-full bg-[#FFE1E9] border border-[#F0C8D5] p-3 text-zinc-900 text-xs outline-none focus:border-[#223055] transition-colors rounded-none placeholder:text-[#B08E9B]"
           />
@@ -95,7 +97,7 @@ const App: React.FC = () => {
             onClick={handleSaveKey}
             className="sm-lift w-full py-3 bg-[#FFE1E9] hover:bg-[#FBD3DE] border border-[#F0C8D5] text-zinc-900 transition-colors text-sm font-medium rounded-none"
           >
-            Enter Studio
+            스튜디오 입장
           </button>
           <a
             href="https://aistudio.google.com/app/apikey"
@@ -103,11 +105,14 @@ const App: React.FC = () => {
             rel="noreferrer"
             className="sm-underline inline-block text-xs text-[#8A737B] hover:text-[#223055] mt-4"
           >
-            Get API Key
+            API 키 발급받기
           </a>
           <p className="text-[10px] text-[#B08E9B] pt-2">
-            For your security, the key is not saved — enter it each visit.
+            보안을 위해 키는 저장하지 않습니다. 방문하실 때마다 입력이 필요합니다.
           </p>
+        </div>
+        <div className="absolute bottom-6 left-0 w-full px-6 text-center text-[9px] tracking-[0.25em] uppercase text-[#A8919A] z-10">
+          SM Entertainment Vision &amp; eXperience(VX) Center
         </div>
       </div>
     );

@@ -37,15 +37,17 @@ const Cursor: React.FC = () => {
         let visible = false;
         let frame = 0;
 
-        const EASE = 0.18;      // ring catch-up per frame
-        const SETTLED = 0.01;   // px below which we stop drawing
+        // Snappy on purpose: the ring should read as attached to the pointer,
+        // not dragged behind it. 0.45 catches up in ~4 frames.
+        const EASE = 0.45;      // ring catch-up per frame
+        const SETTLED = 0.05;   // px below which we stop drawing
 
         const draw = () => {
             const dx = tx - rx;
             const dy = ty - ry;
             rx += dx * EASE;
             ry += dy * EASE;
-            scale += (targetScale - scale) * 0.18;
+            scale += (targetScale - scale) * 0.4;
 
             dot.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`;
             ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${scale})`;
@@ -85,15 +87,10 @@ const Cursor: React.FC = () => {
             const hit = can ? el.closest(INTERACTIVE) : null;
             const text = can ? el.closest(TEXTUAL) : null;
 
-            // a caret-like bar over text fields, a swollen ring over everything
-            // else clickable, resting size otherwise
-            const next = text ? 1 : hit ? 1.9 : 1;
+            // Shape is handled in CSS (capsule -> rounded box -> caret); scale
+            // is reserved for the press feedback, so the two never fight.
             ring.classList.toggle('is-text', !!text);
             ring.classList.toggle('is-active', !!hit && !text);
-            if (next !== targetScale) {
-                targetScale = next;
-                kick();
-            }
         };
 
         const onLeave = () => {
@@ -102,8 +99,8 @@ const Cursor: React.FC = () => {
             ring.style.opacity = '0';
         };
 
-        const onDown = () => { targetScale = targetScale === 1 ? 0.75 : 1.5; kick(); };
-        const onUp = () => { targetScale = ring.classList.contains('is-active') ? 1.9 : 1; kick(); };
+        const onDown = () => { targetScale = 0.86; kick(); };
+        const onUp = () => { targetScale = 1; kick(); };
 
         window.addEventListener('pointermove', onMove, { passive: true });
         window.addEventListener('pointerover', onOver, { passive: true });
