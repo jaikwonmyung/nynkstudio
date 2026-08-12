@@ -62,7 +62,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                 </div>
                 <div className="flex items-center gap-4">
                     <button
-                        className="group flex items-center gap-2 text-zinc-400 hover:text-zinc-900 transition-colors p-2"
+                        className="group flex items-center gap-2 text-[#8A737B] hover:text-[#1a1a1a] transition-colors p-2"
                         onClick={() => setShowSettings(true)}
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-[#223055]"></div>
@@ -89,25 +89,25 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             placeholder="Describe the space, materials, and atmosphere..."
-                            className="w-full h-32 md:h-40 bg-[#FFE1E9] border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
+                            className="w-full h-32 md:h-40 bg-[#FFE1E9] border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-[#B08E9B] text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
                         />
                         <div className="flex items-center gap-2">
                             {/* Consistency Toggle */}
                             <button
                                 onClick={() => setIsConsistencyFixed(!isConsistencyFixed)}
-                                className={`w-auto inline-flex items-center gap-3 py-2 px-3 border text-xs transition-all ${isConsistencyFixed ? 'bg-[#FFE1E9] border-[#223055] text-zinc-900' : 'bg-[#FFE1E9] border-[#F0C8D5] text-zinc-400 hover:border-[#E2AEBF]'}`}
+                                className={`w-auto inline-flex items-center gap-3 py-2 px-3 border text-xs transition-all ${isConsistencyFixed ? 'bg-[#FFE1E9] border-[#223055] text-zinc-900' : 'bg-[#FFE1E9] border-[#F0C8D5] text-[#8A737B] hover:border-[#E2AEBF]'}`}
                             >
                                 <i className={`fa-solid ${isConsistencyFixed ? 'fa-lock' : 'fa-lock-open'} text-[10px]`}></i>
-                                <div className={`w-1.5 h-1.5 rounded-full ${isConsistencyFixed ? 'bg-[#223055]' : 'bg-zinc-200'}`}></div>
+                                <div className={`w-1.5 h-1.5 rounded-full ${isConsistencyFixed ? 'bg-[#223055]' : 'bg-[#E2AEBF]'}`}></div>
                             </button>
 
                             {/* Engine Selection Toggle */}
                             <button
                                 onClick={() => setEngineType(engineType === '4K' ? 'NANOBANANA2' : '4K')}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-400 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#8A737B] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <span>{engineType === '4K' ? '4K ULTRA' : 'NANOBANANA 2'}</span>
-                                <div className={`w-1 h-1 rounded-full ${engineType === 'NANOBANANA2' ? 'bg-[#223055]' : 'bg-zinc-200'}`}></div>
+                                <div className={`w-1 h-1 rounded-full ${engineType === 'NANOBANANA2' ? 'bg-[#223055]' : 'bg-[#E2AEBF]'}`}></div>
                             </button>
                         </div>
                     </section>
@@ -131,7 +131,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                                     </div>
                                     <button
                                         onClick={(e) => removeReference(index, e)}
-                                        className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-[#FFE1E9] border border-[#F0C8D5] hover:border-[#E2AEBF] text-zinc-400 hover:text-zinc-900 transition-colors z-20"
+                                        className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-[#FFE1E9] border border-[#F0C8D5] hover:border-[#E2AEBF] text-[#8A737B] hover:text-[#1a1a1a] transition-colors z-20"
                                     >
                                         <i className="fa-solid fa-xmark text-[10px]"></i>
                                     </button>
@@ -149,7 +149,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                             >
                             </div>
                         </div>
-                        <p className="text-[10px] text-zinc-400">
+                        <p className="text-[10px] text-[#8A737B]">
                             Tap or drag images to guide the structure.
                         </p>
                     </section>
@@ -161,7 +161,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                         className={`w-full py-4 flex items-center justify-center transition-all rounded-none border border-[#F0C8D5]
               ${isGenerating ? 'bg-[#FFE1E9] border-[#F0C8D5] cursor-not-allowed' : 'bg-[#FFE1E9] hover:bg-[#FBD3DE] active:bg-[#FBD3DE]'}`}
                     >
-                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-[#223055]'}`}></div>
+                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-[#8A737B] animate-pulse' : 'bg-[#223055]'}`}></div>
                     </button>
 
                     {error && (
@@ -170,7 +170,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                             <span className="text-xs text-red-500 font-medium">{error.includes("quota") ? "Usage limit exceeded" : error}</span>
                             <button
                                 onClick={() => setShowKeyModal(true)}
-                                className="text-[10px] text-zinc-400 underline hover:text-zinc-600 ml-2"
+                                className="text-[10px] text-[#8A737B] underline hover:text-zinc-600 ml-2"
                             >
                                 Change Key
                             </button>
@@ -184,13 +184,13 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                         <div className="absolute top-4 left-4 z-10 flex gap-2">
                             <button
                                 onClick={() => setPreviewMode('fill')}
-                                className={`px-3 py-1.5 text-[10px] border transition-all ${previewMode === 'fill' ? 'bg-[#FBD3DE] text-zinc-900 border-[#E2AEBF]' : 'bg-[#FFE1E9] text-zinc-500 border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
+                                className={`px-3 py-1.5 text-[10px] border transition-all ${previewMode === 'fill' ? 'bg-[#FBD3DE] text-zinc-900 border-[#E2AEBF]' : 'bg-[#FFE1E9] text-[#6B5A60] border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
                             >
                                 Full
                             </button>
                             <button
                                 onClick={() => setPreviewMode('fit')}
-                                className={`px-3 py-1.5 text-[10px] border transition-all ${previewMode === 'fit' ? 'bg-[#FBD3DE] text-zinc-900 border-[#E2AEBF]' : 'bg-[#FFE1E9] text-zinc-500 border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
+                                className={`px-3 py-1.5 text-[10px] border transition-all ${previewMode === 'fit' ? 'bg-[#FBD3DE] text-zinc-900 border-[#E2AEBF]' : 'bg-[#FFE1E9] text-[#6B5A60] border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
                             >
                                 Fit
                             </button>
@@ -216,12 +216,12 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                                 </div>
                             </div>
                         ) : isGenerating ? (
-                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-400 space-y-4">
+                            <div className="flex-1 flex flex-col items-center justify-center text-[#8A737B] space-y-4">
                                 <div className="w-2 h-2 rounded-full bg-[#223055] animate-pulse"></div>
                                 <span className="text-[10px] tracking-[0.3em] uppercase">Generating</span>
                             </div>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-300 space-y-4">
+                            <div className="flex-1 flex flex-col items-center justify-center text-[#B08E9B] space-y-4">
                             </div>
                         )}
 
@@ -229,19 +229,19 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                             <div className="p-4 border-t border-[#F0C8D5] bg-[#FFE1E9] flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <h4 className="text-xs font-medium text-zinc-900">Output</h4>
-                                    <span className="text-[10px] text-zinc-300">·</span>
-                                    <p className="text-[10px] text-zinc-400">{imageSize}</p>
+                                    <span className="text-[10px] text-[#B08E9B]">·</span>
+                                    <p className="text-[10px] text-[#8A737B]">{imageSize}</p>
                                 </div>
                                 <div className="flex gap-4">
                                     <button
                                         onClick={() => setResult(null)}
-                                        className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
+                                        className="text-[#8A737B] hover:text-[#1a1a1a] transition-colors text-xs"
                                     >
                                         Reset
                                     </button>
                                     <button
                                         onClick={() => reusePrompt(result.prompt)}
-                                        className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs"
+                                        className="text-[#8A737B] hover:text-[#1a1a1a] transition-colors text-xs"
                                     >
                                         Reuse
                                     </button>
@@ -264,7 +264,7 @@ const RedGenerationPage: React.FC<RedGenerationPageProps> = ({
                     ))}
                 </div>
                 {history.length === 0 && (
-                    <div className="text-center py-10 text-xs text-zinc-300">
+                    <div className="text-center py-10 text-xs text-[#B08E9B]">
                         No history yet.
                     </div>
                 )}

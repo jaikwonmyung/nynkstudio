@@ -69,14 +69,14 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         className="w-3 h-3 rounded-full border transition-colors bg-[#FFE1E9] border-[#F0C8D5] hover:border-[#E2AEBF]"
                         title="Back to Selection"
                     ></button>
-                    <span className="text-[10px] tracking-[0.3em] text-zinc-400 uppercase">Video</span>
+                    <span className="text-[10px] tracking-[0.3em] text-[#8A737B] uppercase">Video</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <button
-                        className="group flex items-center gap-2 text-zinc-400 hover:text-zinc-900 transition-colors p-2"
+                        className="group flex items-center gap-2 text-[#8A737B] hover:text-[#1a1a1a] transition-colors p-2"
                         onClick={() => setShowSettings(true)}
                     >
-                        <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 group-hover:bg-zinc-400 transition-colors"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#E2AEBF] group-hover:bg-[#8A737B] transition-colors"></div>
                     </button>
                 </div>
             </header>
@@ -87,7 +87,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                     <div className="bg-[#FFE1E9] border border-[#F0C8D5] shadow-xl w-full max-w-xs p-6" onClick={e => e.stopPropagation()}>
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-sm font-bold tracking-tight text-zinc-900">Settings</h2>
-                            <button onClick={() => setShowSettings(false)} className="text-zinc-400 hover:text-zinc-900 transition-colors">
+                            <button onClick={() => setShowSettings(false)} className="text-[#8A737B] hover:text-[#1a1a1a] transition-colors">
                                 <i className="fa-solid fa-xmark"></i>
                             </button>
                         </div>
@@ -110,14 +110,14 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             placeholder="Describe the shot: subject, motion, camera movement, lighting, mood..."
-                            className="w-full h-32 md:h-40 bg-[#FFE1E9] border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
+                            className="w-full h-32 md:h-40 bg-[#FFE1E9] border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-[#B08E9B] text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
                         />
 
                         {/* Model + Aspect toggles */}
                         <div className="flex flex-wrap items-center gap-2">
                             <button
                                 onClick={cycleModel}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <span>{MODEL_LABELS[modelKey]}</span>
                                 <div className="w-1 h-1 rounded-full bg-[#223055]"></div>
@@ -125,7 +125,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
 
                             <button
                                 onClick={() => setAspectRatio(aspectRatio === '16:9' ? '9:16' : '16:9')}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <div className={`border border-current ${aspectRatio === '16:9' ? 'w-4 h-2.5' : 'w-2.5 h-4'}`}></div>
                                 <span>{aspectRatio}</span>
@@ -134,7 +134,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             {canDoHD && (
                                 <button
                                     onClick={() => setResolution(resolution === '720p' ? '1080p' : '720p')}
-                                    className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
+                                    className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-[#6B5A60] hover:text-[#1a1a1a] hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                                 >
                                     <span>{resolution}</span>
                                 </button>
@@ -144,7 +144,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
 
                     {/* Start image (image-to-video) */}
                     <section className="space-y-3">
-                        <label className="text-[10px] text-zinc-400 uppercase tracking-widest block">Start Frame (optional)</label>
+                        <label className="text-[10px] text-[#8A737B] uppercase tracking-widest block">Start Frame (optional)</label>
                         {startImage ? (
                             <div
                                 onClick={handleTriggerFile}
@@ -156,7 +156,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 </div>
                                 <button
                                     onClick={removeStartImage}
-                                    className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-[#FFE1E9] border border-[#F0C8D5] hover:border-[#E2AEBF] text-zinc-400 hover:text-zinc-900 transition-colors z-20"
+                                    className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-[#FFE1E9] border border-[#F0C8D5] hover:border-[#E2AEBF] text-[#8A737B] hover:text-[#1a1a1a] transition-colors z-20"
                                 >
                                     <i className="fa-solid fa-xmark text-[10px]"></i>
                                 </button>
@@ -169,7 +169,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 onDrop={onDrop}
                                 className={`group relative aspect-video transition-all cursor-pointer flex items-center justify-center dashed-border-tight hover:opacity-80 ${draggingSlot ? 'bg-[#FBD3DE]' : 'bg-[#FFE1E9]'}`}
                             >
-                                <span className="text-[10px] text-zinc-300">Tap or drag an image to animate</span>
+                                <span className="text-[10px] text-[#B08E9B]">Tap or drag an image to animate</span>
                             </div>
                         )}
                     </section>
@@ -178,7 +178,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                     <section className="space-y-3">
                         <button
                             onClick={() => setShowAdvanced(!showAdvanced)}
-                            className="text-[10px] text-zinc-400 hover:text-zinc-900 uppercase tracking-widest flex items-center gap-2 transition-colors"
+                            className="text-[10px] text-[#8A737B] hover:text-[#1a1a1a] uppercase tracking-widest flex items-center gap-2 transition-colors"
                         >
                             <i className={`fa-solid ${showAdvanced ? 'fa-chevron-down' : 'fa-chevron-right'} text-[8px]`}></i>
                             Advanced
@@ -188,7 +188,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 value={negativePrompt}
                                 onChange={(e) => setNegativePrompt(e.target.value)}
                                 placeholder="Negative prompt — what to avoid..."
-                                className="w-full h-20 bg-[#FFE1E9] border p-3 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
+                                className="w-full h-20 bg-[#FFE1E9] border p-3 text-zinc-900 outline-none resize-none transition-colors placeholder:text-[#B08E9B] text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
                             />
                         )}
                     </section>
@@ -199,16 +199,16 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         disabled={isGenerating}
                         className={`w-full py-4 flex items-center justify-center gap-3 transition-all rounded-none border
               ${isGenerating
-                                ? 'bg-[#FBD3DE] border-[#F0C8D5] text-zinc-500 cursor-not-allowed'
+                                ? 'bg-[#FBD3DE] border-[#F0C8D5] text-[#6B5A60] cursor-not-allowed'
                                 : 'bg-[#223055] border-[#223055] text-white hover:bg-zinc-800 active:bg-black'}`}
                     >
-                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-[#FFE1E9]'}`}></div>
+                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-[#8A737B] animate-pulse' : 'bg-[#FFE1E9]'}`}></div>
                         <span className="text-xs font-medium tracking-widest uppercase">
                             {isGenerating ? (progress || 'Working…') : 'Generate Video'}
                         </span>
                     </button>
                     {isGenerating && (
-                        <p className="text-[10px] text-zinc-400 text-center -mt-3">Veo usually takes 60–90 seconds. Keep this tab open.</p>
+                        <p className="text-[10px] text-[#8A737B] text-center -mt-3">Veo usually takes 60–90 seconds. Keep this tab open.</p>
                     )}
 
                     {error && (
@@ -217,7 +217,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             <span className="text-xs text-red-500 font-medium">{error.includes('quota') ? 'Usage limit exceeded' : error}</span>
                             <button
                                 onClick={() => setShowKeyModal(true)}
-                                className="text-[10px] text-zinc-400 underline hover:text-zinc-600 ml-2"
+                                className="text-[10px] text-[#8A737B] underline hover:text-zinc-600 ml-2"
                             >
                                 Change Key
                             </button>
@@ -250,25 +250,25 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 </div>
                             </div>
                         ) : isGenerating ? (
-                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-400 space-y-4">
-                                <div className="w-2 h-2 rounded-full bg-zinc-400 animate-pulse"></div>
+                            <div className="flex-1 flex flex-col items-center justify-center text-[#8A737B] space-y-4">
+                                <div className="w-2 h-2 rounded-full bg-[#8A737B] animate-pulse"></div>
                                 <span className="text-[10px] tracking-[0.3em] uppercase">{progress || 'Rendering'}</span>
-                                <span className="text-[10px] text-zinc-300">Veo can take 1–3 minutes.</span>
+                                <span className="text-[10px] text-[#B08E9B]">Veo can take 1–3 minutes.</span>
                             </div>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center text-zinc-300 space-y-4"></div>
+                            <div className="flex-1 flex flex-col items-center justify-center text-[#B08E9B] space-y-4"></div>
                         )}
 
                         {result && !isGenerating && (
                             <div className="p-4 border-t border-[#F0C8D5] bg-[#FFE1E9] flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <h4 className="text-xs font-medium text-zinc-900">Output</h4>
-                                    <span className="text-[10px] text-zinc-300">·</span>
-                                    <p className="text-[10px] text-zinc-400">{result.aspectRatio}</p>
+                                    <span className="text-[10px] text-[#B08E9B]">·</span>
+                                    <p className="text-[10px] text-[#8A737B]">{result.aspectRatio}</p>
                                 </div>
                                 <div className="flex gap-4">
-                                    <button onClick={() => setResult(null)} className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs">Reset</button>
-                                    <button onClick={() => reusePrompt(result.prompt)} className="text-zinc-400 hover:text-zinc-900 transition-colors text-xs">Reuse</button>
+                                    <button onClick={() => setResult(null)} className="text-[#8A737B] hover:text-[#1a1a1a] transition-colors text-xs">Reset</button>
+                                    <button onClick={() => reusePrompt(result.prompt)} className="text-[#8A737B] hover:text-[#1a1a1a] transition-colors text-xs">Reuse</button>
                                 </div>
                             </div>
                         )}
@@ -293,7 +293,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                     ))}
                 </div>
                 {history.length === 0 && (
-                    <div className="text-center py-10 text-xs text-zinc-300">No videos yet.</div>
+                    <div className="text-center py-10 text-xs text-[#B08E9B]">No videos yet.</div>
                 )}
             </section>
         </div>
