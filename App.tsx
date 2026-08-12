@@ -37,10 +37,12 @@ const App: React.FC = () => {
       setKeyError('API 키를 입력해 주세요.');
       return;
     }
-    // Cheap shape check first, so an obvious paste error fails instantly
-    // without a round trip.
-    if (!/^AIza[A-Za-z0-9_-]{30,}$/.test(key)) {
-      setKeyError('키 형식이 올바르지 않습니다. Google AI Studio에서 발급받은 키를 그대로 붙여넣어 주세요.');
+    // Do NOT pattern-match the vendor's key format. Google issues more than one
+    // shape (classic "AIza...", newer "AQ...."), and guessing the format locks
+    // out perfectly valid keys. Only catch obvious paste damage here and let
+    // the API itself be the authority on whether the key works.
+    if (/\s/.test(key) || key.length < 20) {
+      setKeyError('키가 온전히 붙여넣어지지 않은 것 같습니다. 공백 없이 전체를 복사해 주세요.');
       return;
     }
 
@@ -48,13 +50,15 @@ const App: React.FC = () => {
     setKeyError('');
     try {
       // ListModels is the lightest authenticated call available.
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`
-      );
+      const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models', {
+        headers: { 'x-goog-api-key': key },
+      });
       if (!res.ok) {
+        // 400/401/403 all mean "this credential was rejected"; anything else is
+        // a transient failure the user should just retry.
         setKeyError(
-          res.status === 400 || res.status === 403
-            ? '이 키로는 접속할 수 없습니다. 키가 맞는지, 사용 설정이 되어 있는지 확인해 주세요.'
+          [400, 401, 403].includes(res.status)
+            ? '이 키로는 접속할 수 없습니다. 키가 맞는지, Generative Language API 사용 설정이 되어 있는지 확인해 주세요.'
             : `키를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요. (오류 ${res.status})`
         );
         return;
