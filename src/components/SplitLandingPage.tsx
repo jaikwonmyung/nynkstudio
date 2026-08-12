@@ -51,7 +51,7 @@ const SplitLandingPage: React.FC<SplitLandingPageProps> = ({ onSelect }) => {
 
             {/* Credit rail — sits above both halves, so it needs a colour that
                 reads on navy and on pink alike. */}
-            <div className="pointer-events-none absolute bottom-5 left-0 w-full px-6 flex items-center justify-between text-[9px] tracking-[0.25em] uppercase z-20">
+            <div className="pointer-events-none absolute bottom-5 left-0 w-full pl-6 pr-6 sm:pr-44 flex items-center justify-between text-[9px] tracking-[0.25em] uppercase z-20">
                 <span className="text-white/45">SM Entertainment Vision &amp; eXperience(VX) Center</span>
                 <span className="text-[#223055]/45 normal-case tracking-[0.12em]">The Future of Culture Technology</span>
             </div>

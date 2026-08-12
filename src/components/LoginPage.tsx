@@ -51,7 +51,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 </form>
             </div>
 
-            <div className="absolute bottom-6 left-0 w-full px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[9px] tracking-[0.25em] uppercase text-[#A8919A] z-10">
+            <div className="absolute bottom-6 left-0 w-full pl-6 pr-6 sm:pr-44 flex flex-col sm:flex-row items-center justify-between gap-2 text-[9px] tracking-[0.25em] uppercase text-[#A8919A] z-10">
                 <span>SM Entertainment Vision &amp; eXperience(VX) Center</span>
                 <span className="normal-case tracking-[0.12em]">The Future of Culture Technology</span>
             </div>
