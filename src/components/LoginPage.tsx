@@ -34,7 +34,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                                 setError('');
                             }}
                             placeholder="Enter password"
-                            className="w-full bg-white border border-zinc-200 p-3 text-sm outline-none focus:border-zinc-600 transition-colors rounded-none placeholder:text-zinc-300"
+                            className="w-full bg-[#FFE1E9] border border-[#F0C8D5] p-3 text-sm outline-none focus:border-[#223055] transition-colors rounded-none placeholder:text-zinc-300"
                             autoFocus
                         />
                     </div>

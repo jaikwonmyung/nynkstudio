@@ -10,7 +10,7 @@ const SplitLandingPage: React.FC<SplitLandingPageProps> = ({ onSelect }) => {
             {/* Left: Red Channel */}
             <div
                 onClick={() => onSelect('red')}
-                className="w-full h-1/2 md:w-1/2 md:h-full bg-[#ff0000] cursor-pointer hover:brightness-110 transition-all flex items-center justify-center group active:brightness-90"
+                className="w-full h-1/2 md:w-1/2 md:h-full bg-[#223055] cursor-pointer hover:brightness-110 transition-all flex items-center justify-center group active:brightness-90"
             >
                 {/* Optional subtle indicator - keeping it empty/minimal per style */}
             </div>

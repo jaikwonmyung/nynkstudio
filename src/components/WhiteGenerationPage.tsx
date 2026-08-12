@@ -62,11 +62,11 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
             />
 
             {/* Header - White / Video Channel */}
-            <header className="border-b border-zinc-200 py-3 px-4 md:py-4 md:px-6 flex justify-between items-center bg-white sticky top-0 z-50">
+            <header className="border-b border-[#F0C8D5] py-3 px-4 md:py-4 md:px-6 flex justify-between items-center bg-[#FFE1E9] sticky top-0 z-50">
                 <div className="flex items-center gap-3">
                     <button
                         onClick={onBack}
-                        className="w-3 h-3 rounded-full border transition-colors bg-white border-zinc-200 hover:border-zinc-400"
+                        className="w-3 h-3 rounded-full border transition-colors bg-[#FFE1E9] border-[#F0C8D5] hover:border-[#E2AEBF]"
                         title="Back to Selection"
                     ></button>
                     <span className="text-[10px] tracking-[0.3em] text-zinc-400 uppercase">Video</span>
@@ -84,7 +84,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
             {/* Minimal settings popover (reset key) */}
             {showSettings && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/5" onClick={() => setShowSettings(false)}>
-                    <div className="bg-white border border-zinc-200 shadow-xl w-full max-w-xs p-6" onClick={e => e.stopPropagation()}>
+                    <div className="bg-[#FFE1E9] border border-[#F0C8D5] shadow-xl w-full max-w-xs p-6" onClick={e => e.stopPropagation()}>
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-sm font-bold tracking-tight text-zinc-900">Settings</h2>
                             <button onClick={() => setShowSettings(false)} className="text-zinc-400 hover:text-zinc-900 transition-colors">
@@ -110,22 +110,22 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             placeholder="Describe the shot: subject, motion, camera movement, lighting, mood..."
-                            className="w-full h-32 md:h-40 bg-white border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-zinc-600"
+                            className="w-full h-32 md:h-40 bg-[#FFE1E9] border p-4 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
                         />
 
                         {/* Model + Aspect toggles */}
                         <div className="flex flex-wrap items-center gap-2">
                             <button
                                 onClick={cycleModel}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <span>{MODEL_LABELS[modelKey]}</span>
-                                <div className="w-1 h-1 rounded-full bg-zinc-900"></div>
+                                <div className="w-1 h-1 rounded-full bg-[#223055]"></div>
                             </button>
 
                             <button
                                 onClick={() => setAspectRatio(aspectRatio === '16:9' ? '9:16' : '16:9')}
-                                className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
+                                className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                             >
                                 <div className={`border border-current ${aspectRatio === '16:9' ? 'w-4 h-2.5' : 'w-2.5 h-4'}`}></div>
                                 <span>{aspectRatio}</span>
@@ -134,7 +134,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                             {canDoHD && (
                                 <button
                                     onClick={() => setResolution(resolution === '720p' ? '1080p' : '720p')}
-                                    className="inline-flex items-center gap-2 py-2 px-4 border border-zinc-200 text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-all uppercase tracking-widest"
+                                    className="inline-flex items-center gap-2 py-2 px-4 border border-[#F0C8D5] text-[10px] text-zinc-500 hover:text-zinc-900 hover:border-[#E2AEBF] transition-all uppercase tracking-widest"
                                 >
                                     <span>{resolution}</span>
                                 </button>
@@ -148,15 +148,15 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         {startImage ? (
                             <div
                                 onClick={handleTriggerFile}
-                                className="group relative aspect-video border border-zinc-200 bg-white overflow-hidden cursor-pointer"
+                                className="group relative aspect-video border border-[#F0C8D5] bg-[#FFE1E9] overflow-hidden cursor-pointer"
                             >
                                 <img src={startImage.previewUrl} className="w-full h-full object-cover" alt="Start frame" />
-                                <div className="absolute inset-0 bg-white/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <div className="absolute inset-0 bg-[#FFE1E9]/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                     <span className="text-[10px] font-medium text-zinc-800">Replace</span>
                                 </div>
                                 <button
                                     onClick={removeStartImage}
-                                    className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-white border border-zinc-200 hover:border-zinc-400 text-zinc-400 hover:text-zinc-900 transition-colors z-20"
+                                    className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center bg-[#FFE1E9] border border-[#F0C8D5] hover:border-[#E2AEBF] text-zinc-400 hover:text-zinc-900 transition-colors z-20"
                                 >
                                     <i className="fa-solid fa-xmark text-[10px]"></i>
                                 </button>
@@ -167,7 +167,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 onDragOver={onDragOver}
                                 onDragLeave={onDragLeave}
                                 onDrop={onDrop}
-                                className={`group relative aspect-video transition-all cursor-pointer flex items-center justify-center dashed-border-tight hover:opacity-80 ${draggingSlot ? 'bg-zinc-50' : 'bg-white'}`}
+                                className={`group relative aspect-video transition-all cursor-pointer flex items-center justify-center dashed-border-tight hover:opacity-80 ${draggingSlot ? 'bg-[#FBD3DE]' : 'bg-[#FFE1E9]'}`}
                             >
                                 <span className="text-[10px] text-zinc-300">Tap or drag an image to animate</span>
                             </div>
@@ -188,7 +188,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                 value={negativePrompt}
                                 onChange={(e) => setNegativePrompt(e.target.value)}
                                 placeholder="Negative prompt — what to avoid..."
-                                className="w-full h-20 bg-white border p-3 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-zinc-200 focus:border-zinc-600"
+                                className="w-full h-20 bg-[#FFE1E9] border p-3 text-zinc-900 outline-none resize-none transition-colors placeholder:text-zinc-300 text-xs leading-relaxed rounded-none border-[#F0C8D5] focus:border-[#223055]"
                             />
                         )}
                     </section>
@@ -199,10 +199,10 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         disabled={isGenerating}
                         className={`w-full py-4 flex items-center justify-center gap-3 transition-all rounded-none border
               ${isGenerating
-                                ? 'bg-zinc-100 border-zinc-200 text-zinc-500 cursor-not-allowed'
-                                : 'bg-zinc-900 border-zinc-900 text-white hover:bg-zinc-800 active:bg-black'}`}
+                                ? 'bg-[#FBD3DE] border-[#F0C8D5] text-zinc-500 cursor-not-allowed'
+                                : 'bg-[#223055] border-[#223055] text-white hover:bg-zinc-800 active:bg-black'}`}
                     >
-                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-white'}`}></div>
+                        <div className={`w-2 h-2 rounded-full transition-colors duration-500 ${isGenerating ? 'bg-zinc-400 animate-pulse' : 'bg-[#FFE1E9]'}`}></div>
                         <span className="text-xs font-medium tracking-widest uppercase">
                             {isGenerating ? (progress || 'Working…') : 'Generate Video'}
                         </span>
@@ -227,9 +227,9 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
 
                 {/* Right Column: Output */}
                 <div className="lg:col-span-8 flex flex-col h-full min-h-[50vh]">
-                    <div className="flex-1 min-h-[400px] md:min-h-[600px] border border-zinc-200 bg-zinc-50 flex flex-col relative group">
+                    <div className="flex-1 min-h-[400px] md:min-h-[600px] border border-[#F0C8D5] bg-[#FFE1E9] flex flex-col relative group">
                         {result && !isGenerating ? (
-                            <div className="flex-1 flex items-center justify-center p-4 md:p-8 bg-white">
+                            <div className="flex-1 flex items-center justify-center p-4 md:p-8 bg-[#FFE1E9]">
                                 <div className="relative w-full max-w-3xl">
                                     <video
                                         src={result.videoUrl}
@@ -242,7 +242,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                                     <div className="absolute bottom-4 right-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={handleDownload}
-                                            className="px-4 py-2 bg-white text-zinc-900 text-xs font-medium border border-zinc-200 hover:border-zinc-400 transition-colors shadow-sm"
+                                            className="px-4 py-2 bg-[#FFE1E9] text-zinc-900 text-xs font-medium border border-[#F0C8D5] hover:border-[#E2AEBF] transition-colors shadow-sm"
                                         >
                                             Download
                                         </button>
@@ -260,7 +260,7 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
                         )}
 
                         {result && !isGenerating && (
-                            <div className="p-4 border-t border-zinc-200 bg-white flex justify-between items-center">
+                            <div className="p-4 border-t border-[#F0C8D5] bg-[#FFE1E9] flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <h4 className="text-xs font-medium text-zinc-900">Output</h4>
                                     <span className="text-[10px] text-zinc-300">·</span>
@@ -277,12 +277,12 @@ const WhiteGenerationPage: React.FC<WhiteGenerationPageProps> = ({
             </main>
 
             {/* History */}
-            <section className="max-w-[1600px] mx-auto px-4 md:px-6 mt-12 md:mt-16 pb-20 border-t border-zinc-100 pt-8">
+            <section className="max-w-[1600px] mx-auto px-4 md:px-6 mt-12 md:mt-16 pb-20 border-t border-[#F0C8D5] pt-8">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
                     {history.map((item) => (
                         <div
                             key={item.timestamp}
-                            className="group relative aspect-video bg-zinc-50 border border-zinc-100 overflow-hidden cursor-pointer hover:border-zinc-300 transition-colors"
+                            className="group relative aspect-video bg-[#FFE1E9] border border-[#F0C8D5] overflow-hidden cursor-pointer hover:border-[#E2AEBF] transition-colors"
                             onClick={() => restoreHistoryItem(item)}
                         >
                             <video src={item.videoUrl} muted loop playsInline className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"

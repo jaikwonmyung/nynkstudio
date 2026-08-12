@@ -25,7 +25,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/5" onClick={onClose}>
-            <div className="bg-white border border-zinc-200 shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <div className="bg-[#FFE1E9] border border-[#F0C8D5] shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-sm font-bold tracking-tight text-zinc-900">Settings</h2>
                     <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 transition-colors">
@@ -40,21 +40,21 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                         <div className="grid grid-cols-3 gap-2">
                             <button
                                 onClick={() => setAspectRatio('1:1')}
-                                className={`py-2 px-3 flex flex-col items-center gap-2 border transition-all ${aspectRatio === '1:1' ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-400'}`}
+                                className={`py-2 px-3 flex flex-col items-center gap-2 border transition-all ${aspectRatio === '1:1' ? 'bg-[#223055] text-white border-[#223055]' : 'bg-[#FFE1E9] text-zinc-500 border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
                             >
                                 <div className="w-4 h-4 border border-current"></div>
                                 <span className="text-[10px]">Square</span>
                             </button>
                             <button
                                 onClick={() => setAspectRatio('16:9')}
-                                className={`py-2 px-3 flex flex-col items-center gap-2 border transition-all ${aspectRatio === '16:9' ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-400'}`}
+                                className={`py-2 px-3 flex flex-col items-center gap-2 border transition-all ${aspectRatio === '16:9' ? 'bg-[#223055] text-white border-[#223055]' : 'bg-[#FFE1E9] text-zinc-500 border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
                             >
                                 <div className="w-6 h-3.5 border border-current"></div>
                                 <span className="text-[10px]">Landscape</span>
                             </button>
                             <button
                                 onClick={() => setAspectRatio('9:16')}
-                                className={`py-2 px-3 flex flex-col items-center gap-2 border transition-all ${aspectRatio === '9:16' ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200 hover:border-zinc-400'}`}
+                                className={`py-2 px-3 flex flex-col items-center gap-2 border transition-all ${aspectRatio === '9:16' ? 'bg-[#223055] text-white border-[#223055]' : 'bg-[#FFE1E9] text-zinc-500 border-[#F0C8D5] hover:border-[#E2AEBF]'}`}
                             >
                                 <div className="w-3.5 h-6 border border-current"></div>
                                 <span className="text-[10px]">Portrait</span>
@@ -65,12 +65,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     {/* Quality / Size */}
                     <div className="space-y-3">
                         <label className="text-xs font-medium text-zinc-500 block">Output Quality</label>
-                        <div className="flex border border-zinc-200 divide-x divide-zinc-200">
+                        <div className="flex border border-[#F0C8D5] divide-x divide-zinc-200">
                             {['1K', '2K', '4K'].map((size) => (
                                 <button
                                     key={size}
                                     onClick={() => setImageSize(size as ImageSize)}
-                                    className={`flex-1 py-2 text-xs font-medium transition-colors ${imageSize === size ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-500 hover:text-zinc-900'}`}
+                                    className={`flex-1 py-2 text-xs font-medium transition-colors ${imageSize === size ? 'bg-[#223055] text-white' : 'bg-[#FFE1E9] text-zinc-500 hover:text-zinc-900'}`}
                                 >
                                     {size}
                                 </button>
@@ -79,7 +79,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
 
                     {/* API Key */}
-                    <div className="pt-4 border-t border-zinc-100">
+                    <div className="pt-4 border-t border-[#F0C8D5]">
                         <button
                             onClick={onClearKey}
                             className="w-full py-3 border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 text-xs font-medium transition-colors"
