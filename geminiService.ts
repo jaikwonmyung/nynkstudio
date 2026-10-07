@@ -1,7 +1,8 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { ImageSize, AspectRatio, EngineType } from "./types";
-import { DEFAULT_POSITIVE_PROMPT, DEFAULT_NEGATIVE_PROMPT, APP_MODEL, TURBO_MODEL } from "./constants";
+import { APP_MODEL, TURBO_MODEL } from "./constants";
+import { buildConsistencyPrompt, buildNeutralPrompt } from "./prompts";
 
 const resizeImage = (base64Str: string): Promise<string> => {
   return new Promise((resolve) => {
@@ -55,26 +56,9 @@ export const generateImage = async (
   // Combine prompt logic
   let fullPrompt = "";
   if (config.consistencyFixed) {
-    fullPrompt = `TASK: visual_editing
-    TARGET_IMAGE: Image 1 (Reference)
-    EDIT_INSTRUCTION: "${userPrompt}"
-    
-    STRICT CONSTRAINTS:
-    1. PRESERVE BACKGROUND: You must legacy-preserve the original background, floor, walls, ceiling, windows, and view outside strict pixel-for-pixel.
-    2. LIGHTING LOCK: The time of day, color temperature, and shadow direction MUST mirror the reference image exactly. Do not make it brighter or change the mood.
-    3. CAMERA LOCK: The camera angle, focal length, and perspective must remain 100% identical.
-    4. PRESERVATION PRIORITY: It is better to have a slightly imperfect edit than to change the background.
-    5. NON-DESTRUCTIVE: Treat this as a Photoshop layer edit. Do not re-render the underlying room.`;
+    fullPrompt = buildConsistencyPrompt(userPrompt);
   } else {
-    // Neutral generation: follow the user's description literally. Do NOT force
-    // any architecture / building / brutalist theme — that was the cause of
-    // buildings appearing in every output.
-    const cleanPrompt = (userPrompt || "").trim();
-    fullPrompt = `${cleanPrompt}
-
-Rendering guidance: ${DEFAULT_POSITIVE_PROMPT}.
-Follow the description above literally. Do not introduce any unrequested subjects, scenery, or architecture (no buildings, concrete, or brutalist structures unless the description explicitly asks for them).
-Avoid: ${DEFAULT_NEGATIVE_PROMPT}.`;
+    fullPrompt = buildNeutralPrompt(userPrompt);
   }
 
   // Prompt construction is handled above. Sending request...
