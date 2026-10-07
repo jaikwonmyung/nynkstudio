@@ -5,157 +5,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-
+  <meta name="theme-color" content="#ffffff" />
+  <title>Original AIVP</title>
   <style>
-    /* HIDE STATUS HEADER (User Request) */
-    header>div:last-child {
-      display: none !important;
+    :root {
+      color-scheme: light;
     }
 
-    /* Copyright Footer */
-    #gm-footer {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
+    html,
+    body {
       width: 100%;
-      text-align: center;
-      /* Center Aligned */
-      color: #333;
-      /* Dark/Subtle (Dim on black) */
-      font-family: 'Inter', sans-serif;
-      font-size: 9px;
-      line-height: 1.4;
-      z-index: 9999;
-      pointer-events: none;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
-      /* Force 1 line */
-      opacity: 0.7;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #ffffff;
     }
-  </style>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="GM AI" />
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#000000">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="apple-touch-icon" href="/favicon.svg">
-  <link rel="manifest" href="./manifest.json" />
 
-  <title>Gentle Monster AI</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
-    rel="stylesheet">
-  <style>
-    /* Mobile App Optimizations */
-    html {
+    #entry-gate {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+    }
+
+    #entry-hotspot {
+      position: absolute;
+      right: env(safe-area-inset-right, 0px);
+      bottom: env(safe-area-inset-bottom, 0px);
+      width: 72px;
+      height: 72px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      opacity: 0;
+      cursor: default;
+      touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      overscroll-behavior: none;
-    }
-
-    /* Mobile Redirect */
-    @media (max-width: 768px) {
-      /* Redirect logic to be handled by JS, but css can hints */
-    }
-
-    body {
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    input,
-    textarea {
-      -webkit-user-select: text !important;
-      user-select: text !important;
-    }
-
-    @font-face {
-      font-family: 'GentleMonsterSerif';
-      src: url('/GentleMonsterSerif-Regular.otf') format('opentype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    body {
-      font-family: 'GentleMonsterSerif', sans-serif;
-      background-color: #000000;
-      color: #e4e4e7;
-    }
-
-    /* Custom Scrollbar for Minimalist feel */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #000000;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #333;
-      border-radius: 0px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #555;
     }
   </style>
-
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
-  }
-}
-</script>
-  <script type="module" crossorigin src="/assets/index--MSCwbGc.js?v=20260708c"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-C9xhdpiy.css">
-
-  <!-- CORE LOADER: Auth, Redirect, UI Injection -->
-  <script src="/assets/gm-loader.js?v=2.0" defer></script>
-  <script>
-    // Legacy redirect fallback (optional, can be removed if loader works 100%)
-    // But we prefer the loader to handle it.
-  </script>
 </head>
 
 <body>
-  <!-- Password Protection Overlay -->
-  <div id="auth-overlay"
-    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
-    <div style="font-family: 'GentleMonsterSerif', serif; font-size: 2rem; margin-bottom: 2rem; letter-spacing: 2px;">
-      GENTLE MONSTER</div>
-    <div
-      style="font-family: 'Inter', sans-serif; font-size: 0.8rem; letter-spacing: 1px; color: #666; margin-bottom: 3rem; text-transform: uppercase;">
-      Space Team Access</div>
+  <main id="entry-gate">
+    <button id="entry-hotspot" type="button" aria-label="Enter Original AIVP"></button>
+  </main>
 
-    <div
-      style="width: 100%; max-width: 300px; position: relative; display: flex; align-items: center; border-bottom: 1px solid #333;">
-      <input type="password" id="pass-input" placeholder="ENTER PASSWORD"
-        style="flex: 1; background: transparent; border: none; color: white; padding: 10px 0; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; text-align: center; border-radius: 0; -webkit-appearance: none; appearance: none;">
-      <button id="auth-btn"
-        style="background: transparent; border: none; color: white; padding: 10px; cursor: pointer; font-size: 1.2rem;">→</button>
-    </div>
-    <div id="error-msg"
-      style="color: #ff3333; font-size: 0.7rem; margin-top: 10px; text-align: center; opacity: 0; transition: opacity 0.3s;">
-      INCORRECT PASSWORD</div>
-  </div>
+  <script>
+    (() => {
+      const hotspot = document.getElementById('entry-hotspot');
+      const enter = () => {
+        const target = window.matchMedia('(max-width: 768px)').matches
+          ? '/mobile.html'
+          : '/app.html';
+        window.location.assign(target);
+      };
 
-  <div id="gm-footer">
-    © ALL RIGHTS RESERVED. ALL CONTENT, DESIGNS, CONCEPTS, VISUALS, IMAGES, SPATIAL WORKS, DIGITAL ASSETS, AND RELATED
-    MATERIALS ARE THE EXCLUSIVE INTELLECTUAL PROPERTY OF IICOMBINED CORP. AND GENTLE MONSTER. UNAUTHORIZED USE,
-    REPRODUCTION, MODIFICATION, OR DISTRIBUTION IS STRICTLY PROHIBITED.
-  </div>
-
-  <div id="root"></div>
+      hotspot.addEventListener('click', enter, { once: true });
+    })();
+  </script>
 </body>
 
 </html>
